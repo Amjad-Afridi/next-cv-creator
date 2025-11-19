@@ -3,6 +3,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useResumeStore } from "@/lib/store/resumeStore";
 import { Template, TemplateCategory, TemplateStyle } from "@/lib/types/template";
 import { getAllTemplates, getPopularTemplates } from "@/lib/templates/templateUtils";
 import { getTemplateStats } from "@/lib/templates/templateGenerator";
@@ -35,7 +36,8 @@ export default function TemplateSelector({
   const [selectedStyle, setSelectedStyle] = useState<TemplateStyle | "all">("all");
   const [showATSOnly, setShowATSOnly] = useState(false);
   const [showFreeOnly, setShowFreeOnly] = useState(false);
-  
+  const { currentResume } = useResumeStore();
+
   // Preview modal state
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
@@ -302,12 +304,13 @@ export default function TemplateSelector({
 
       {/* Preview Modal */}
       <TemplatePreviewModal
-        template={previewTemplate}
-        isOpen={showPreviewModal}
-        onClose={handleClosePreview}
-        onSelect={onSelectTemplate}
-        isSelected={previewTemplate?.id === selectedTemplateId}
-      />
+  template={previewTemplate}
+  resume={currentResume as any}
+  isOpen={showPreviewModal}
+  onClose={handleClosePreview}
+  onSelect={onSelectTemplate}
+  isSelected={previewTemplate?.id === selectedTemplateId}
+/>
     </div>
   );
 }

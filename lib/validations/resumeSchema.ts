@@ -4,21 +4,17 @@ import { z } from "zod";
 
 // Contact Information Schema
 export const contactInfoSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().min(1, "Phone number is required"),
-  city: z.string().min(1, "City is required"),
-  country: z.string().min(1, "Country is required"),
-  linkedin: z.string().url("Invalid URL").optional().or(z.literal("")),
-  website: z.string().url("Invalid URL").optional().or(z.literal("")),
-  github: z.string().url("Invalid URL").optional().or(z.literal("")),
-  customLink: z
-    .object({
-      label: z.string().optional(),
-      url: z.string().url("Invalid URL").optional(),
-    })
-    .optional(),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().min(1, 'Phone number is required'),
+  city: z.string().min(1, 'City is required'),
+  country: z.string().min(1, 'Country is required'),
+  linkedin: z.string().url('Invalid URL').optional().or(z.literal('')),
+  website: z.string().url('Invalid URL').optional().or(z.literal('')),
+  github: z.string().url('Invalid URL').optional().or(z.literal('')),
+  customLinkLabel: z.string().optional(),
+  customLinkUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
 });
 
 // Professional Summary Schema

@@ -7,11 +7,14 @@ import { generateAllTemplates } from "./templateGenerator";
 let cachedTemplates: Template[] | null = null;
 
 /**
- * Get all available templates (with caching)
+ * Get all available templates (with caching for performance)
  */
 export function getAllTemplates(): Template[] {
   if (!cachedTemplates) {
+    console.log('Generating templates...');
+    const start = Date.now();
     cachedTemplates = generateAllTemplates();
+    console.log(`Generated ${cachedTemplates.length} templates in ${Date.now() - start}ms`);
   }
   return cachedTemplates;
 }
@@ -72,7 +75,7 @@ export function getTemplatesByCategory(category: string): Template[] {
 }
 
 /**
- * Get popular templates
+ * Get popular templates (sorted by popularity, best first)
  */
 export function getPopularTemplates(limit: number = 6): Template[] {
   return getAllTemplates()

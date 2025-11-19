@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import TemplateSelector from "@/components/builder/TemplateSelector";
 import { getTemplateById } from "@/lib/templates/templateUtils";
-
+import { toast } from "sonner";
 export default function FinalizeStep() {
   const { currentResume, setCurrentStep } = useResumeStore();
   const [selectedTemplateId, setSelectedTemplateId] = useState(
@@ -34,19 +34,54 @@ export default function FinalizeStep() {
     }));
   };
 
-  const handleDownload = async () => {
-    setIsGenerating(true);
+ const handleDownload = async () => {
+  setIsGenerating(true);
 
-    const selectedTemplate = getTemplateById(selectedTemplateId);
+  try {
+    const response = await fetch('/api/generate-pdf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        resume: currentResume,
+        templateId: selectedTemplateId,
+      }),
+    });
 
-    // Simulate PDF generation (we'll implement real PDF generation later)
-    setTimeout(() => {
-      alert(
-        `Generating PDF!\n\nTemplate: ${selectedTemplate?.name}\nResume Title: ${resumeTitle}\n\nNote: PDF generation will be implemented in the next phase.`
-      );
-      setIsGenerating(false);
-    }, 2000);
-  };
+    if (!response.ok) {
+      throw new Error('Failed to generate PDF');
+    }
+
+    // Get the PDF blob
+    const blob = await response.blob();
+
+    // Create download link
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${resumeTitle.replace(/\s+/g, '_')}_${selectedTemplate?.name.replace(/\s+/g, '_')}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    
+    // Cleanup
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+
+    // Show success toast
+    toast.success('Resume downloaded successfully!', {
+      description: `${resumeTitle} with ${selectedTemplate?.name} template`,
+    });
+  } catch (error) {
+    console.error('Download error:', error);
+    toast.error('Failed to download resume', {
+      description: 'Please try again or contact support',
+    });
+  } finally {
+    setIsGenerating(false);
+  }
+};
+
 
   const completionPercentage = calculateCompletionPercentage(currentResume);
   const selectedTemplate = getTemplateById(selectedTemplateId);
@@ -91,18 +126,18 @@ export default function FinalizeStep() {
               <CompletionItem label="Summary" completed={!!currentResume.summary} />
               <CompletionItem
                 label="Experience"
-                completed={currentResume.experience && currentResume.experience.length > 0}
+                completed={!!(currentResume.experience && currentResume.experience.length > 0)}
               />
               <CompletionItem
                 label="Education"
-                completed={currentResume.education && currentResume.education.length > 0}
+                completed={!!(currentResume.education && currentResume.education.length > 0)}
               />
               <CompletionItem
                 label="Skills"
                 completed={
-                  currentResume.skills &&
+                  !!(currentResume.skills &&
                   (currentResume.skills.technical.length > 0 ||
-                    currentResume.skills.soft.length > 0)
+                    currentResume.skills.soft.length > 0))
                 }
               />
             </div>

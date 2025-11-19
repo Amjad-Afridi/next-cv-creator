@@ -24,12 +24,12 @@ export default function SkillsStep() {
     watch,
     formState: { errors },
   } = useForm<SkillsFormData>({
-    resolver: zodResolver(skillsSchema),
+    resolver: zodResolver(skillsSchema) as any,
     defaultValues: {
-      technical: currentResume.skills?.technical || [],
-      soft: currentResume.skills?.soft || [],
-      languages: currentResume.skills?.languages || [],
-      tools: currentResume.skills?.tools || [],
+      technical: (currentResume.skills?.technical || []) as any,
+      soft: (currentResume.skills?.soft || []) as any,
+      languages: (currentResume.skills?.languages || []) as any,
+      tools: (currentResume.skills?.tools || []) as any,
     },
   });
 

@@ -27,7 +27,7 @@ export default function ProjectsSection() {
 
   const { register, control, watch } = useForm<ProjectForm>({
     defaultValues: {
-      projects: currentResume.projects || [
+      projects: (currentResume.projects || [
         {
           id: `project-${Date.now()}`,
           name: "",
@@ -36,7 +36,7 @@ export default function ProjectsSection() {
           link: "",
           date: "",
         },
-      ],
+      ]) as any,
     },
   });
 
@@ -49,10 +49,18 @@ export default function ProjectsSection() {
   const watchedProjects = watch("projects");
   useEffect(() => {
     const timer = setTimeout(() => {
+      // Convert technologies from string to array
+      const convertedProjects = watchedProjects.map((project: any) => ({
+        ...project,
+        technologies: project.technologies
+          ? project.technologies.split(',').map((t: string) => t.trim())
+          : [],
+      }));
+
       useResumeStore.setState((state) => ({
         currentResume: {
           ...state.currentResume,
-          projects: watchedProjects,
+          projects: convertedProjects as any,
         },
       }));
     }, 500);

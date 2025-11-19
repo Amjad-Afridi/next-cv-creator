@@ -16,27 +16,38 @@ export type TemplateStyle =
   | 'minimal' 
   | 'classic';
 
-export type LayoutType = 
-  | 'single-column' 
-  | 'two-column' 
-  | 'sidebar' 
-  | 'timeline';
+export type LayoutType =
+  | 'single-column'
+  | 'two-column'
+  | 'sidebar'
+  | 'timeline'
+  | 'asymmetric';
 
-export type HeaderStyle = 
-  | 'centered' 
-  | 'left-aligned' 
-  | 'two-column' 
-  | 'minimal' 
-  | 'bold';
+export type HeaderStyle =
+  | 'centered'
+  | 'left-aligned'
+  | 'two-column'
+  | 'minimal'
+  | 'bold'
+  | 'creative'
+  | 'gradient';
 
-export type FontFamily = 
-  | 'inter' 
-  | 'roboto' 
-  | 'georgia' 
-  | 'times' 
-  | 'arial' 
-  | 'montserrat' 
-  | 'poppins';
+export type FontFamily =
+  | 'inter'
+  | 'roboto'
+  | 'georgia'
+  | 'times'
+  | 'arial'
+  | 'montserrat'
+  | 'poppins'
+  | 'openSans'
+  | 'lora'
+  | 'merriweather'
+  | 'playfair'
+  | 'raleway'
+  | 'nunito'
+  | 'sourceCodePro'
+  | 'timesNewRoman';
 
 export interface ColorScheme {
   primary: string;

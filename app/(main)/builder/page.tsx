@@ -123,29 +123,29 @@ const renderStep = () => {
             </p>
             
             {/* Professional Links */}
-            {(currentResume.contactInfo?.linkedin || 
-              currentResume.contactInfo?.website || 
+            {(currentResume.contactInfo?.linkedin ||
+              currentResume.contactInfo?.website ||
               currentResume.contactInfo?.github ||
               currentResume.contactInfo?.customLink?.url) && (
               <div className="flex flex-wrap justify-center gap-3 mt-2 text-xs text-blue-600">
                 {currentResume.contactInfo?.linkedin && (
                   <a href={currentResume.contactInfo.linkedin} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                    LinkedIn
+                    {currentResume.contactInfo.linkedin}
                   </a>
                 )}
                 {currentResume.contactInfo?.website && (
                   <a href={currentResume.contactInfo.website} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                    Website
+                    {currentResume.contactInfo.website}
                   </a>
                 )}
                 {currentResume.contactInfo?.github && (
                   <a href={currentResume.contactInfo.github} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                    GitHub
+                    {currentResume.contactInfo.github}
                   </a>
                 )}
                 {currentResume.contactInfo?.customLink?.url && (
                   <a href={currentResume.contactInfo.customLink.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                    {currentResume.contactInfo.customLink.label || "Link"}
+                    {currentResume.contactInfo.customLink.label || currentResume.contactInfo.customLink.url}
                   </a>
                 )}
               </div>
@@ -206,21 +206,21 @@ const renderStep = () => {
                 {currentResume.education.map((edu) => (
                   <div key={edu.id} className="space-y-1">
                     <div className="flex justify-between items-start">
-                      <div>
+                      <div className="flex-1">
                         <h3 className="font-semibold text-sm">{edu.degree}</h3>
                         <p className="text-sm text-slate-600">{edu.institution}</p>
+                        {edu.gpa && (
+                          <p className="text-xs text-slate-500 mt-1">GPA: {edu.gpa}</p>
+                        )}
+                        {edu.additionalInfo && (
+                          <p className="text-xs text-slate-500 mt-1">{edu.additionalInfo}</p>
+                        )}
                       </div>
-                      <div className="text-right text-xs text-slate-500">
+                      <div className="text-right text-xs text-slate-500 ml-4">
                         <p>{edu.location}</p>
                         <p>{edu.isCurrentlyStudying ? "Expected " : ""}{edu.graduationDate}</p>
                       </div>
                     </div>
-                    {edu.gpa && (
-                      <p className="text-sm text-slate-600">GPA: {edu.gpa}</p>
-                    )}
-                    {edu.additionalInfo && (
-                      <p className="text-sm text-slate-600">{edu.additionalInfo}</p>
-                    )}
                   </div>
                 ))}
               </div>
@@ -313,8 +313,8 @@ const renderStep = () => {
                     <div className="flex justify-between items-start">
                       <div>
                         <h3 className="font-semibold text-sm">{project.name}</h3>
-                        {project.technologies && (
-                          <p className="text-xs text-slate-500">{project.technologies}</p>
+                        {project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 && (
+                          <p className="text-xs text-slate-500">{project.technologies.join(', ')}</p>
                         )}
                       </div>
                       {project.date && (
@@ -331,7 +331,7 @@ const renderStep = () => {
                         rel="noopener noreferrer"
                         className="text-xs text-blue-600 hover:underline"
                       >
-                        View Project
+                        {project.link}
                       </a>
                     )}
                   </div>
@@ -350,25 +350,25 @@ const renderStep = () => {
                 {currentResume.certifications.map((cert: any) => (
                   <div key={cert.id} className="space-y-1">
                     <div className="flex justify-between items-start">
-                      <div>
+                      <div className="flex-1">
                         <h3 className="font-semibold text-sm">{cert.name}</h3>
                         <p className="text-sm text-slate-600">{cert.issuer}</p>
+                        {cert.credentialUrl && (
+                          <a
+                            href={cert.credentialUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-600 hover:underline inline-block mt-1"
+                          >
+                            {cert.credentialUrl}
+                          </a>
+                        )}
                       </div>
-                      <div className="text-right text-xs text-slate-500">
+                      <div className="text-right text-xs text-slate-500 ml-4">
                         <p>{cert.dateIssued}</p>
                         {cert.expirationDate && <p>Expires: {cert.expirationDate}</p>}
                       </div>
                     </div>
-                    {cert.credentialUrl && (
-                      <a
-                        href={cert.credentialUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-blue-600 hover:underline"
-                      >
-                        View Credential
-                      </a>
-                    )}
                   </div>
                 ))}
               </div>
@@ -412,20 +412,20 @@ const renderStep = () => {
                 {currentResume.volunteer.map((vol: any) => (
                   <div key={vol.id} className="space-y-1">
                     <div className="flex justify-between items-start">
-                      <div>
+                      <div className="flex-1">
                         <h3 className="font-semibold text-sm">{vol.role}</h3>
                         <p className="text-sm text-slate-600">{vol.organization}</p>
+                        {vol.description && (
+                          <p className="text-sm text-slate-600 mt-1">{vol.description}</p>
+                        )}
                       </div>
-                      <div className="text-right text-xs text-slate-500">
-                        <p>{vol.location}</p>
+                      <div className="text-right text-xs text-slate-500 ml-4">
+                        {vol.location && <p>{vol.location}</p>}
                         <p>
                           {vol.startDate} - {vol.isCurrentRole ? "Present" : vol.endDate}
                         </p>
                       </div>
                     </div>
-                    {vol.description && (
-                      <p className="text-sm text-slate-600">{vol.description}</p>
-                    )}
                   </div>
                 ))}
               </div>

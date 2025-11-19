@@ -30,11 +30,11 @@ export default function ContactInfoStep() {
     // Clean up customLink if it's empty
     const cleanedData = {
       ...data,
-      customLink: data.customLink?.label && data.customLink?.url 
-        ? { label: data.customLink.label, url: data.customLink.url }
+      customLink: data.customLinkLabel && data.customLinkUrl
+        ? { label: data.customLinkLabel, url: data.customLinkUrl }
         : undefined
     };
-    
+
     updateContactInfo(cleanedData);
     setCurrentStep(2); // Move to next step
   };
@@ -236,12 +236,12 @@ export default function ContactInfoStep() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   <Input
                     placeholder="Label (e.g., Portfolio)"
-                    {...register("customLink.label")}
+                    {...register("customLinkLabel")}
                   />
                   <Input
                     type="url"
                     placeholder="https://..."
-                    {...register("customLink.url")}
+                    {...register("customLinkUrl")}
                   />
                 </div>
               </div>
