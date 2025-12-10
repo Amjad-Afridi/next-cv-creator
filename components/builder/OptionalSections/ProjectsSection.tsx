@@ -36,7 +36,13 @@ export default function ProjectsSection() {
           link: "",
           date: "",
         },
-      ]) as any,
+      ]).map((project: any) => ({
+        ...project,
+        // Convert technologies array to string for form input
+        technologies: Array.isArray(project.technologies) 
+          ? project.technologies.join(', ')
+          : (project.technologies || ''),
+      })) as any,
     },
   });
 
@@ -90,8 +96,8 @@ export default function ProjectsSection() {
               <Label htmlFor={`projects.${index}.name`}>Project Name</Label>
               <Input
                 id={`projects.${index}.name`}
-                placeholder="E-commerce Website"
                 {...register(`projects.${index}.name`)}
+                placeholder="E-commerce Platform"
               />
             </div>
 
@@ -106,31 +112,37 @@ export default function ProjectsSection() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor={`projects.${index}.description`}>Description</Label>
+            <Label htmlFor={`projects.${index}.description`}>
+              Description
+            </Label>
             <Textarea
               id={`projects.${index}.description`}
-              placeholder="Built a full-stack e-commerce platform with user authentication..."
-              rows={3}
               {...register(`projects.${index}.description`)}
+              placeholder="Built a full-stack e-commerce platform with user authentication, product catalog, and payment integration..."
+              rows={3}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor={`projects.${index}.technologies`}>Technologies Used</Label>
+            <Label htmlFor={`projects.${index}.technologies`}>
+              Technologies (comma-separated)
+            </Label>
             <Input
               id={`projects.${index}.technologies`}
-              placeholder="React, Node.js, MongoDB"
               {...register(`projects.${index}.technologies`)}
+              placeholder="React, Node.js, PostgreSQL, Docker"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor={`projects.${index}.link`}>Project Link (Optional)</Label>
+            <Label htmlFor={`projects.${index}.link`}>
+              Project Link (optional)
+            </Label>
             <Input
               id={`projects.${index}.link`}
-              type="url"
-              placeholder="https://github.com/username/project"
               {...register(`projects.${index}.link`)}
+              placeholder="https://github.com/username/project"
+              type="url"
             />
           </div>
         </div>
@@ -139,7 +151,6 @@ export default function ProjectsSection() {
       <Button
         type="button"
         variant="outline"
-        size="sm"
         onClick={() =>
           append({
             id: `project-${Date.now()}`,
@@ -150,9 +161,10 @@ export default function ProjectsSection() {
             date: "",
           })
         }
+        className="w-full"
       >
         <Plus className="h-4 w-4 mr-2" />
-        Add Another Project
+        Add Project
       </Button>
     </div>
   );

@@ -1,4 +1,5 @@
-// lib/pdf/layouts/academicScholar.ts
+// lib/pdf/layout/academicScholar.ts
+// SINGLE-PAGE OPTIMIZED - Academic scholar design
 
 import { Resume } from "@/lib/types/resume";
 import { Template } from "@/lib/types/template";
@@ -9,7 +10,12 @@ export function renderAcademicScholar(resume: Resume, template: Template): strin
   const hasSummary = resume.summary && resume.summary.trim().length > 0;
   const hasExperience = resume.experience && resume.experience.length > 0;
   const hasEducation = resume.education && resume.education.length > 0;
-  const hasSkills = resume.skills && (resume.skills.technical.length > 0 || resume.skills.soft.length > 0);
+  const hasSkills = resume.skills && (resume.skills.technical.length > 0 || resume.skills.soft.length > 0 || resume.skills.tools.length > 0);
+  const hasLanguages = resume.skills.languages && resume.skills.languages.length > 0;
+  const hasProjects = resume.projects && resume.projects.length > 0;
+  const hasCertifications = resume.certifications && resume.certifications.length > 0;
+  const hasAwards = resume.awards && resume.awards.length > 0;
+  const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
 
   return `
 <!DOCTYPE html>
@@ -17,66 +23,163 @@ export function renderAcademicScholar(resume: Resume, template: Template): strin
 <head>
   <meta charset="UTF-8">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    @page { 
+      size: letter; 
+      margin: 25pt 0 35pt 0;
+    }
+    
+    @page :first {
+      margin-bottom: 15pt;
+    }
+    
     body {
       font-family: 'Times New Roman', Times, serif;
-      font-size: ${config.typography.sizes.body}pt;
+      font-size: 9.5pt;
       line-height: 1.6;
       color: ${config.colors.text};
       background: white;
-      padding: ${config.spacing.margins.top}pt ${config.spacing.margins.right}pt ${config.spacing.margins.bottom}pt ${config.spacing.margins.left}pt;
+      padding: 10pt 50pt 10pt 50pt;
     }
-    .header { text-align: center; padding-bottom: 15pt; margin-bottom: ${config.spacing.sectionGap}pt; border-bottom: 1.5pt solid ${config.colors.primary}; }
+    
+    .header {
+      text-align: center;
+      padding-bottom: 12pt;
+      margin-bottom: 14pt;
+      border-bottom: 1.5pt solid ${config.colors.primary};
+    }
+    
     .name {
-      font-size: ${config.typography.sizes.name}pt;
-      font-weight: ${config.typography.weights.bold};
+      font-size: 24pt;
+      font-weight: bold;
       color: ${config.colors.primary};
-      margin-bottom: 10pt;
+      margin-bottom: 8pt;
     }
-    .contact-line { font-size: ${config.typography.sizes.small}pt; color: ${config.colors.textLight}; line-height: 1.4; }
-    .section { margin-bottom: ${config.spacing.sectionGap}pt; }
+    
+    .contact-info {
+      font-size: 8.5pt;
+      color: ${config.colors.textLight};
+      line-height: 1.5;
+      margin-bottom: 4pt;
+    }
+    
+    .contact-links {
+      font-size: 8pt;
+      color: ${config.colors.textLight};
+      line-height: 1.4;
+    }
+    
+    .section {
+      margin-bottom: 13pt;
+    }
+    
     .section-title {
-      font-size: ${config.typography.sizes.heading}pt;
-      font-weight: ${config.typography.weights.bold};
+      font-size: 11pt;
+      font-weight: bold;
       color: ${config.colors.primary};
-      margin-bottom: ${config.spacing.itemGap}pt;
+      margin-bottom: 8pt;
       text-transform: uppercase;
       border-bottom: 1pt solid ${config.colors.border};
-      padding-bottom: 4pt;
+      padding-bottom: 3pt;
     }
-    .job-item { margin-bottom: ${config.spacing.itemGap}pt; page-break-inside: avoid; }
-    .job-title { font-size: ${config.typography.sizes.subheading}pt; font-weight: ${config.typography.weights.semibold}; color: ${config.colors.text}; }
-    .company-line { font-size: ${config.typography.sizes.small}pt; color: ${config.colors.textLight}; margin-top: 2pt; margin-bottom: 4pt; }
-    .description { margin-top: 4pt; line-height: 1.6; text-align: justify; }
-    .description ul { margin-left: 18pt; margin-top: 3pt; }
-    .description li { margin-bottom: 2pt; }
-    .skills-list { columns: 2; column-gap: 25pt; }
-    .skill-item { font-size: ${config.typography.sizes.small}pt; margin-bottom: 4pt; break-inside: avoid; }
-    @page { size: letter; margin: 0; }
+    
+    .job-item {
+      margin-bottom: 9pt;
+      page-break-inside: avoid;
+    }
+    
+    .job-title {
+      font-size: 10pt;
+      font-weight: 600;
+      color: ${config.colors.text};
+      margin-bottom: 2pt;
+      line-height: 1.3;
+    }
+    
+    .company-line {
+      font-size: 8.5pt;
+      color: ${config.colors.textLight};
+      margin-top: 2pt;
+      margin-bottom: 4pt;
+      line-height: 1.3;
+    }
+    
+    .description {
+      font-size: 9pt;
+      line-height: 1.6;
+      text-align: justify;
+      color: ${config.colors.text};
+      margin-top: 3pt;
+    }
+    
+    .description ul {
+      margin: 2pt 0 2pt 12pt;
+      padding-left: 0;
+    }
+    
+    .description li {
+      margin-bottom: 2pt;
+    }
+    
+    .skills-list {
+      columns: 2;
+      column-gap: 20pt;
+    }
+    
+    .skill-item {
+      font-size: 9pt;
+      margin-bottom: 3pt;
+      break-inside: avoid;
+    }
+    
+    .tech-list {
+      font-size: 8pt;
+      color: ${config.colors.textLight};
+      margin-top: 2pt;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
-    <div class="contact-line">
-      ${resume.contactInfo?.email || 'email@example.com'}<br>
-      ${resume.contactInfo?.phone || '(555) 123-4567'} • ${resume.contactInfo?.city || 'City'}, ${resume.contactInfo?.country || 'Country'}
+    <div class="contact-info">
+      ${resume.contactInfo?.email || 'email@example.com'} • 
+      ${resume.contactInfo?.phone || '(555) 123-4567'} • 
+      ${resume.contactInfo?.city || 'City'}, ${resume.contactInfo?.country || 'Country'}
     </div>
+    ${(resume.contactInfo?.linkedin || resume.contactInfo?.github || resume.contactInfo?.website || resume.contactInfo?.customLink?.url) ? `
+    <div class="contact-links">
+      ${resume.contactInfo?.linkedin ? `${resume.contactInfo.linkedin}` : ''}${resume.contactInfo?.github ? `${resume.contactInfo?.linkedin ? ' • ' : ''}${resume.contactInfo.github}` : ''}${resume.contactInfo?.website ? `${(resume.contactInfo?.linkedin || resume.contactInfo?.github) ? ' • ' : ''}${resume.contactInfo.website}` : ''}${resume.contactInfo?.customLink?.url ? `${(resume.contactInfo?.linkedin || resume.contactInfo?.github || resume.contactInfo?.website) ? ' • ' : ''}${resume.contactInfo.customLink.label || 'Website'}: ${resume.contactInfo.customLink.url}` : ''}
+    </div>
+    ` : ''}
   </div>
-  ${hasSummary ? `<div class="section"><div class="section-title">Research Interests</div><p style="text-align: justify;">${resume.summary}</p></div>` : ''}
+
+  ${hasSummary ? `
+  <div class="section">
+    <div class="section-title">Research Interests</div>
+    <div class="description">${resume.summary}</div>
+  </div>
+  ` : ''}
+
   ${hasEducation ? `
   <div class="section">
     <div class="section-title">Education</div>
     ${resume.education.map(edu => `
       <div class="job-item">
         <div class="job-title">${edu.degree}</div>
-        <div class="company-line">${edu.institution}, ${edu.location} • ${edu.isCurrentlyStudying ? 'Expected ' : ''}${edu.graduationDate}</div>
-        ${edu.gpa ? `<div style="margin-top: 2pt; font-size: ${config.typography.sizes.small}pt;">GPA: ${edu.gpa}</div>` : ''}
-        ${edu.additionalInfo ? `<div style="margin-top: 2pt; font-size: ${config.typography.sizes.small}pt;">${edu.additionalInfo}</div>` : ''}
+        <div class="company-line">${edu.institution}, ${edu.location} • ${edu.isCurrentlyStudying ? 'Expected ' : ''}${edu.graduationDate}${edu.gpa ? ` • GPA: ${edu.gpa}` : ''}</div>
+        ${edu.additionalInfo ? `<div class="description">${edu.additionalInfo}</div>` : ''}
       </div>
     `).join('')}
   </div>
   ` : ''}
+
   ${hasExperience ? `
   <div class="section">
     <div class="section-title">Academic & Professional Experience</div>
@@ -89,13 +192,78 @@ export function renderAcademicScholar(resume: Resume, template: Template): strin
     `).join('')}
   </div>
   ` : ''}
+
+  ${hasProjects ? `
+  <div class="section">
+    <div class="section-title">Research Projects</div>
+    ${resume.projects.map(project => `
+      <div class="job-item">
+        <div class="job-title">${project.name}</div>
+        ${project.date ? `<div class="company-line">${project.date}</div>` : ''}
+        ${project.description ? `<div class="description">${project.description}</div>` : ''}
+        ${project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 ? `<div class="tech-list">Methods: ${project.technologies.join(', ')}</div>` : ''}
+        ${project.link ? `<div class="tech-list">${project.link}</div>` : ''}
+      </div>
+    `).join('')}
+  </div>
+  ` : ''}
+
   ${hasSkills ? `
   <div class="section">
-    <div class="section-title">Skills & Competencies</div>
+    <div class="section-title">Technical Skills</div>
     <div class="skills-list">
       ${resume.skills.technical.map(skill => `<div class="skill-item">• ${skill.name}</div>`).join('')}
-      ${resume.skills.soft.map(skill => `<div class="skill-item">• ${skill.name}</div>`).join('')}
+      ${resume.skills.tools.map(skill => `<div class="skill-item">• ${skill.name}</div>`).join('')}
     </div>
+  </div>
+  ` : ''}
+
+  ${hasLanguages ? `
+  <div class="section">
+    <div class="section-title">Languages</div>
+    <div class="skills-list">
+      ${resume.skills.languages.map(skill => `<div class="skill-item">• ${skill.name}${skill.level ? ` (${skill.level})` : ''}</div>`).join('')}
+    </div>
+  </div>
+  ` : ''}
+
+  ${hasCertifications ? `
+  <div class="section">
+    <div class="section-title">Certifications & Training</div>
+    ${resume.certifications.map(cert => `
+      <div class="job-item">
+        <div class="job-title">${cert.name}</div>
+        <div class="company-line">${cert.issuer}${cert.dateIssued ? ` • ${cert.dateIssued}` : ''}${cert.expiryDate && !cert.doesNotExpire ? ` – ${cert.expiryDate}` : ''}</div>
+        ${cert.credentialId ? `<div class="company-line">Credential ID: ${cert.credentialId}</div>` : ''}
+        ${cert.credentialUrl ? `<div class="tech-list">${cert.credentialUrl}</div>` : ''}
+      </div>
+    `).join('')}
+  </div>
+  ` : ''}
+
+  ${hasAwards ? `
+  <div class="section">
+    <div class="section-title">Honors & Awards</div>
+    ${resume.awards.map(award => `
+      <div class="job-item">
+        <div class="job-title">${award.title}</div>
+        <div class="company-line">${award.issuer}${award.date ? ` • ${award.date}` : ''}</div>
+        ${award.description ? `<div class="description">${award.description}</div>` : ''}
+      </div>
+    `).join('')}
+  </div>
+  ` : ''}
+
+  ${hasVolunteer ? `
+  <div class="section">
+    <div class="section-title">Service & Leadership</div>
+    ${resume.volunteer.map(vol => `
+      <div class="job-item">
+        <div class="job-title">${vol.role}</div>
+        <div class="company-line">${vol.organization}, ${vol.location} • ${vol.startDate} – ${vol.isCurrentRole ? 'Present' : vol.endDate}</div>
+        ${vol.description ? `<div class="description">${vol.description}</div>` : ''}
+      </div>
+    `).join('')}
   </div>
   ` : ''}
 </body>

@@ -1,4 +1,5 @@
-// lib/pdf/layouts/techStartupClean.ts
+// lib/pdf/layout/techStartupClean.ts
+// SINGLE-PAGE OPTIMIZED - Clean tech/startup design
 
 import { Resume } from "@/lib/types/resume";
 import { Template } from "@/lib/types/template";
@@ -9,11 +10,13 @@ export function renderTechStartupClean(resume: Resume, template: Template): stri
   const hasSummary = resume.summary && resume.summary.trim().length > 0;
   const hasExperience = resume.experience && resume.experience.length > 0;
   const hasEducation = resume.education && resume.education.length > 0;
-  const hasSkills = resume.skills && (resume.skills.technical.length > 0 || resume.skills.soft.length > 0);
-const hasProjects = resume.projects && resume.projects.length > 0;
-const hasCertifications = resume.certifications && resume.certifications.length > 0;
-const hasAwards = resume.awards && resume.awards.length > 0;
-const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
+  const hasSkills = resume.skills && (resume.skills.technical.length > 0 || resume.skills.soft.length > 0 || resume.skills.tools.length > 0);
+  const hasLanguages = resume.skills.languages && resume.skills.languages.length > 0;
+  const hasProjects = resume.projects && resume.projects.length > 0;
+  const hasCertifications = resume.certifications && resume.certifications.length > 0;
+  const hasAwards = resume.awards && resume.awards.length > 0;
+  const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
+
   return `
 <!DOCTYPE html>
 <html>
@@ -26,170 +29,148 @@ const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
       box-sizing: border-box;
     }
     
+    @page { 
+      size: letter; 
+      margin: 25pt 0 35pt 0;
+    }
+    
     body {
-      font-family: 'Roboto', -apple-system, sans-serif;
-      font-size: ${config.typography.sizes.body}pt;
-      line-height: 1.6;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.5;
       color: ${config.colors.text};
       background: white;
-      padding: ${config.spacing.margins.top}pt ${config.spacing.margins.right}pt ${config.spacing.margins.bottom}pt ${config.spacing.margins.left}pt;
+      padding: 10pt 40pt 10pt 40pt;
     }
     
     .header {
-      margin-bottom: ${config.spacing.sectionGap}pt;
+      margin-bottom: 14pt;
+      padding-bottom: 10pt;
+      border-bottom: 2pt solid ${config.colors.primary};
     }
     
     .name {
-      font-size: ${config.typography.sizes.name}pt;
-      font-weight: ${config.typography.weights.bold};
-      color: ${config.colors.text};
+      font-size: 26pt;
+      font-weight: 700;
+      color: ${config.colors.primary};
+      margin-bottom: 6pt;
+      letter-spacing: -0.5pt;
+    }
+    
+    .contact-info {
+      font-size: 8.5pt;
+      color: ${config.colors.textLight};
+      line-height: 1.5;
       margin-bottom: 4pt;
     }
     
-    .title {
-      font-size: ${config.typography.sizes.subheading}pt;
-      color: ${config.colors.textLight};
-      margin-bottom: 8pt;
-    }
-    
-    .contact-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12pt;
-      font-size: ${config.typography.sizes.small}pt;
-      color: ${config.colors.textLight};
-    }
-    
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 4pt;
-    }
-    
-    .links-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12pt;
-      margin-top: 6pt;
-      font-size: ${config.typography.sizes.small}pt;
-    }
-    
-    .link-item {
+    .contact-links {
+      font-size: 8pt;
       color: ${config.colors.primary};
-      text-decoration: none;
+      line-height: 1.4;
+      font-weight: 500;
     }
     
     .section {
-      margin-bottom: ${config.spacing.sectionGap}pt;
+      margin-bottom: 11pt;
     }
     
     .section-title {
-      font-size: ${config.typography.sizes.heading}pt;
-      font-weight: ${config.typography.weights.semibold};
-      color: ${config.colors.text};
-      margin-bottom: ${config.spacing.itemGap}pt;
-      padding-bottom: 4pt;
+      font-size: 11.5pt;
+      font-weight: 600;
+      color: ${config.colors.primary};
+      margin-bottom: 7pt;
+      text-transform: uppercase;
+      letter-spacing: 0.8pt;
     }
     
     .job-item {
-      margin-bottom: ${config.spacing.itemGap}pt;
+      margin-bottom: 8pt;
+      page-break-inside: avoid;
     }
     
-    .job-title-line {
-      font-size: ${config.typography.sizes.subheading}pt;
-      font-weight: ${config.typography.weights.semibold};
+    .job-title {
+      font-size: 10pt;
+      font-weight: 600;
       color: ${config.colors.text};
       margin-bottom: 2pt;
+      line-height: 1.3;
     }
     
-    .company-line {
-      font-size: ${config.typography.sizes.small}pt;
+    .company {
+      font-size: 9pt;
+      color: ${config.colors.primary};
+      font-weight: 500;
+      margin-bottom: 1pt;
+      line-height: 1.3;
+    }
+    
+    .date-location {
+      font-size: 8pt;
       color: ${config.colors.textLight};
-      margin-bottom: 6pt;
+      margin-bottom: 4pt;
+      line-height: 1.2;
     }
     
     .description {
-      line-height: 1.6;
+      font-size: 9pt;
+      line-height: 1.5;
+      color: ${config.colors.text};
+      margin-top: 3pt;
     }
     
     .description ul {
-      margin-left: 16pt;
+      margin: 2pt 0;
+      padding-left: 12pt;
     }
     
     .description li {
-      margin-bottom: 3pt;
+      margin-bottom: 2pt;
+      padding-left: 0;
     }
     
-    .skills-flex {
+    .skills-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 6pt;
-      margin-top: 6pt;
     }
     
     .skill-tag {
-      font-size: ${config.typography.sizes.small}pt;
-      padding: 4pt 10pt;
-      background-color: ${config.colors.text};
+      font-size: 8.5pt;
+      padding: 5pt 11pt;
+      background-color: ${config.colors.primary};
       color: white;
-      border-radius: 2pt;
+      border-radius: 4pt;
+      font-weight: 500;
     }
     
-    @page {
-      size: letter;
-      margin: 0;
+    .tech-list {
+      font-size: 8pt;
+      color: ${config.colors.textLight};
+      margin-top: 2pt;
+      font-family: 'Courier New', monospace;
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <div class="header">
     <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
-    <div class="title">Software Developer</div>
-    <div class="contact-row">
-      <div class="contact-item">${resume.contactInfo?.email || 'email@example.com'}</div>
-      <div class="contact-item">${resume.contactInfo?.phone || '(555) 123-4567'}</div>
-      <div class="contact-item">${resume.contactInfo?.city || 'City'}, ${resume.contactInfo?.country || 'Country'}</div>
+    <div class="contact-info">
+      ${resume.contactInfo?.email || 'email@example.com'} | 
+      ${resume.contactInfo?.phone || '(555) 123-4567'} | 
+      ${resume.contactInfo?.city || 'City'}, ${resume.contactInfo?.country || 'Country'}
     </div>
-    ${resume.contactInfo?.linkedin || resume.contactInfo?.github || resume.contactInfo?.website ? `
-    <div class="links-row">
-      ${resume.contactInfo?.linkedin ? `<div class="link-item">→ LinkedIn</div>` : ''}
-      ${resume.contactInfo?.github ? `<div class="link-item">→ GitHub</div>` : ''}
-      ${resume.contactInfo?.website ? `<div class="link-item">→ Website</div>` : ''}
+    ${(resume.contactInfo?.linkedin || resume.contactInfo?.github || resume.contactInfo?.website || resume.contactInfo?.customLink?.url) ? `
+    <div class="contact-links">
+      ${resume.contactInfo?.linkedin ? `${resume.contactInfo.linkedin}` : ''}${resume.contactInfo?.github ? `${resume.contactInfo?.linkedin ? ' | ' : ''}${resume.contactInfo.github}` : ''}${resume.contactInfo?.website ? `${(resume.contactInfo?.linkedin || resume.contactInfo?.github) ? ' | ' : ''}${resume.contactInfo.website}` : ''}${resume.contactInfo?.customLink?.url ? `${(resume.contactInfo?.linkedin || resume.contactInfo?.github || resume.contactInfo?.website) ? ' | ' : ''}${resume.contactInfo.customLink.label || 'Website'}: ${resume.contactInfo.customLink.url}` : ''}
     </div>
     ` : ''}
   </div>
 
   ${hasSummary ? `
   <div class="section">
-    <div class="section-title">About</div>
-    <p>${resume.summary}</p>
-  </div>
-  ` : ''}
-
-  ${hasSkills ? `
-  <div class="section">
-    <div class="section-title">Skills</div>
-    ${resume.skills.technical.length > 0 ? `
-    <div class="skills-flex">
-      ${resume.skills.technical.map(skill => `
-        <span class="skill-tag">${skill.name}</span>
-      `).join('')}
-    </div>
-    ` : ''}
-    ${resume.skills.soft.length > 0 || resume.skills.tools.length > 0 || resume.skills.languages.length > 0 ? `
-    <div class="skills-flex" style="margin-top: 8pt;">
-      ${resume.skills.soft.map(skill => `
-        <span class="skill-tag">${skill.name}</span>
-      `).join('')}
-      ${resume.skills.tools.map(skill => `
-        <span class="skill-tag">${skill.name}</span>
-      `).join('')}
-      ${resume.skills.languages.map(skill => `
-        <span class="skill-tag">${skill.name}${skill.level ? ` (${skill.level})` : ''}</span>
-      `).join('')}
-    </div>
-    ` : ''}
+    <div class="section-title">Summary</div>
+    <div class="description">${resume.summary}</div>
   </div>
   ` : ''}
 
@@ -198,10 +179,9 @@ const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
     <div class="section-title">Experience</div>
     ${resume.experience.map(exp => `
       <div class="job-item">
-        <div class="job-title-line">${exp.jobTitle} @ ${exp.company}</div>
-        <div class="company-line">
-          ${exp.location} • ${exp.startDate} – ${exp.isCurrentJob ? 'Present' : exp.endDate}
-        </div>
+        <div class="job-title">${exp.jobTitle}</div>
+        <div class="company">${exp.company}</div>
+        <div class="date-location">${exp.startDate} – ${exp.isCurrentJob ? 'Present' : exp.endDate} | ${exp.location}</div>
         ${exp.description ? `<div class="description">${exp.description}</div>` : ''}
       </div>
     `).join('')}
@@ -213,24 +193,44 @@ const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
     <div class="section-title">Education</div>
     ${resume.education.map(edu => `
       <div class="job-item">
-        <div class="job-title-line">${edu.degree}</div>
-        <div class="company-line">
-          ${edu.institution} • ${edu.location} • ${edu.isCurrentlyStudying ? 'Expected ' : ''}${edu.graduationDate}
-        </div>
+        <div class="job-title">${edu.degree}</div>
+        <div class="company">${edu.institution}</div>
+        <div class="date-location">${edu.isCurrentlyStudying ? 'Expected ' : ''}${edu.graduationDate} | ${edu.location}${edu.gpa ? ` | GPA: ${edu.gpa}` : ''}</div>
+        ${edu.additionalInfo ? `<div class="description">${edu.additionalInfo}</div>` : ''}
       </div>
     `).join('')}
   </div>
   ` : ''}
 
+  ${hasSkills ? `
+  <div class="section">
+    <div class="section-title">Technical Skills</div>
+    <div class="skills-grid">
+      ${resume.skills.technical.map(skill => `<span class="skill-tag">${skill.name}</span>`).join('')}
+      ${resume.skills.tools.map(skill => `<span class="skill-tag">${skill.name}</span>`).join('')}
+    </div>
+  </div>
+  ` : ''}
+
+  ${hasLanguages ? `
+  <div class="section">
+    <div class="section-title">Languages</div>
+    <div class="skills-grid">
+      ${resume.skills.languages.map(skill => `<span class="skill-tag">${skill.name}</span>`).join('')}
+    </div>
+  </div>
+  ` : ''}
+
   ${hasProjects ? `
   <div class="section">
-    <div class="section-title">PROJECTS</div>
-    ${resume.projects!.map((project: any) => `
-      <div class="section-item">
+    <div class="section-title">Projects</div>
+    ${resume.projects.map(project => `
+      <div class="job-item">
         <div class="job-title">${project.name}</div>
-        ${project.date ? `<div class="company-line">${project.date}</div>` : ''}
-        ${project.description ? `<p style="margin-top: 4pt;">${project.description}</p>` : ''}
-        ${project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 ? `<p style="margin-top: 4pt; font-size: ${config.typography.sizes.small}pt; color: ${config.colors.textLight};">Technologies: ${project.technologies.join(', ')}</p>` : ''}
+        ${project.date ? `<div class="date-location">${project.date}</div>` : ''}
+        ${project.description ? `<div class="description">${project.description}</div>` : ''}
+        ${project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 ? `<div class="tech-list">${project.technologies.join(' • ')}</div>` : ''}
+        ${project.link ? `<div class="tech-list">${project.link}</div>` : ''}
       </div>
     `).join('')}
   </div>
@@ -238,11 +238,13 @@ const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
 
   ${hasCertifications ? `
   <div class="section">
-    <div class="section-title">CERTIFICATIONS</div>
-    ${resume.certifications!.map((cert: any) => `
-      <div class="section-item">
+    <div class="section-title">Certifications</div>
+    ${resume.certifications.map(cert => `
+      <div class="job-item">
         <div class="job-title">${cert.name}</div>
-        <div class="company-line">${cert.issuer}${cert.dateIssued ? ` • ${cert.dateIssued}` : ''}</div>
+        <div class="date-location">${cert.issuer}${cert.dateIssued ? ` | ${cert.dateIssued}` : ''}${cert.expiryDate && !cert.doesNotExpire ? ` – ${cert.expiryDate}` : ''}</div>
+        ${cert.credentialId ? `<div class="date-location">ID: ${cert.credentialId}</div>` : ''}
+        ${cert.credentialUrl ? `<div class="tech-list">${cert.credentialUrl}</div>` : ''}
       </div>
     `).join('')}
   </div>
@@ -250,12 +252,12 @@ const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
 
   ${hasAwards ? `
   <div class="section">
-    <div class="section-title">AWARDS & HONORS</div>
-    ${resume.awards!.map((award: any) => `
-      <div class="section-item">
+    <div class="section-title">Awards</div>
+    ${resume.awards.map(award => `
+      <div class="job-item">
         <div class="job-title">${award.title}</div>
-        <div class="company-line">${award.issuer}${award.date ? ` • ${award.date}` : ''}</div>
-        ${award.description ? `<p style="margin-top: 4pt;">${award.description}</p>` : ''}
+        <div class="date-location">${award.issuer}${award.date ? ` | ${award.date}` : ''}</div>
+        ${award.description ? `<div class="description">${award.description}</div>` : ''}
       </div>
     `).join('')}
   </div>
@@ -263,12 +265,13 @@ const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
 
   ${hasVolunteer ? `
   <div class="section">
-    <div class="section-title">VOLUNTEER EXPERIENCE</div>
-    ${resume.volunteer!.map((vol: any) => `
-      <div class="section-item">
+    <div class="section-title">Volunteer</div>
+    ${resume.volunteer.map(vol => `
+      <div class="job-item">
         <div class="job-title">${vol.role}</div>
-        <div class="company-line">${vol.organization} • ${vol.startDate} - ${vol.isCurrentRole ? 'Present' : vol.endDate}</div>
-        ${vol.description ? `<p style="margin-top: 4pt;">${vol.description}</p>` : ''}
+        <div class="company">${vol.organization}</div>
+        <div class="date-location">${vol.startDate} – ${vol.isCurrentRole ? 'Present' : vol.endDate} | ${vol.location}</div>
+        ${vol.description ? `<div class="description">${vol.description}</div>` : ''}
       </div>
     `).join('')}
   </div>

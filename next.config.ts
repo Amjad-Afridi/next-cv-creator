@@ -1,8 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ['puppeteer'],
-  },
+// next.config.ts
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  serverExternalPackages: ['puppeteer'], // Changed from experimental.serverComponentsExternalPackages
 };
 
-module.exports = nextConfig;
+export default nextConfig;

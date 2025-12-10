@@ -1,17 +1,11 @@
 // lib/store/resumeStore.ts
-
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { Resume, ContactInfo, Experience, Education, Skills } from '@/lib/types/resume';
 
 interface ResumeStore {
-  // Current resume being edited
   currentResume: Partial<Resume>;
-  
-  // Current step in the form
   currentStep: number;
-  
-  // Actions
   setCurrentStep: (step: number) => void;
   updateContactInfo: (data: Partial<ContactInfo>) => void;
   updateSummary: (summary: string) => void;
@@ -38,11 +32,11 @@ const initialResume: Partial<Resume> = {
   experience: [],
   education: [],
   skills: {
-  technical: [],
-  soft: [],
-  languages: [],
-  tools: [],
-},
+    technical: [],
+    soft: [],
+    languages: [],
+    tools: [],
+  },
   projects: [],
   certifications: [],
   languages: [],
@@ -53,7 +47,7 @@ const initialResume: Partial<Resume> = {
     showReferences: false,
     referenceList: [],
   },
-  template: 'professional',
+  template: 'classic-ats',
   styling: {
     primaryColor: '#000000',
     fontSize: 'medium',
@@ -67,9 +61,13 @@ export const useResumeStore = create<ResumeStore>()(
       currentResume: initialResume,
       currentStep: 1,
 
-      setCurrentStep: (step) => set({ currentStep: step }),
+      setCurrentStep: (step) => {
+        console.log('✅ Setting step:', step);
+        set({ currentStep: step });
+      },
 
-      updateContactInfo: (data) =>
+      updateContactInfo: (data) => {
+        console.log('✅ Updating contact info:', data);
         set((state) => ({
           currentResume: {
             ...state.currentResume,
@@ -78,33 +76,41 @@ export const useResumeStore = create<ResumeStore>()(
               ...data,
             } as ContactInfo,
           },
-        })),
+        }));
+      },
 
-      updateSummary: (summary) =>
+      updateSummary: (summary) => {
+        console.log('✅ Updating summary');
         set((state) => ({
           currentResume: {
             ...state.currentResume,
             summary,
           },
-        })),
+        }));
+      },
 
-      updateExperience: (experience) =>
+      updateExperience: (experience) => {
+        console.log('✅ Updating experience');
         set((state) => ({
           currentResume: {
             ...state.currentResume,
             experience,
           },
-        })),
+        }));
+      },
 
-      updateEducation: (education) =>
+      updateEducation: (education) => {
+        console.log('✅ Updating education');
         set((state) => ({
           currentResume: {
             ...state.currentResume,
             education,
           },
-        })),
+        }));
+      },
 
-      updateSkills: (skills) =>
+      updateSkills: (skills) => {
+        console.log('✅ Updating skills');
         set((state) => ({
           currentResume: {
             ...state.currentResume,
@@ -113,19 +119,31 @@ export const useResumeStore = create<ResumeStore>()(
               ...skills,
             } as Skills,
           },
-        })),
+        }));
+      },
 
-      updateTemplate: (template) =>
+      updateTemplate: (template) => {
+        console.log('✅ Updating template:', template);
         set((state) => ({
           currentResume: {
             ...state.currentResume,
             template,
           },
-        })),
+        }));
+      },
 
-      resetResume: () => set({ currentResume: initialResume, currentStep: 1 }),
+      resetResume: () => {
+        console.log('🔴 RESET RESUME CALLED'); // THIS IS THE KEY - see if this is being called
+        console.trace(); // This will show you WHERE it's being called from
+        set({
+          currentResume: initialResume,
+          currentStep: 1,
+        });
+      },
 
-      initializeResume: () =>
+      initializeResume: () => {
+        console.log('🔴 INITIALIZE RESUME CALLED'); // THIS IS THE KEY
+        console.trace(); // This will show you WHERE it's being called from
         set((state) => ({
           currentResume: {
             ...initialResume,
@@ -133,10 +151,25 @@ export const useResumeStore = create<ResumeStore>()(
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
-        })),
+        }));
+      },
     }),
     {
-      name: 'resume-storage', // localStorage key
+      name: 'resume-storage',
+      storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => {
+        console.log('🔵 Starting to rehydrate from localStorage...');
+        return (state, error) => {
+          if (error) {
+            console.error('🔴 Error rehydrating:', error);
+          } else {
+            console.log('✅ Rehydration complete. State:', state);
+          }
+        };
+      },
     }
   )
 );
+
+// Add this to see when store is created
+console.log('🟢 Resume store created');

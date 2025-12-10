@@ -1,4 +1,5 @@
-// lib/pdf/layouts/executiveLuxury.ts
+// lib/pdf/layout/executiveLuxury.ts
+// SINGLE-PAGE OPTIMIZED - Luxury executive design
 
 import { Resume } from "@/lib/types/resume";
 import { Template } from "@/lib/types/template";
@@ -9,7 +10,8 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
   const hasSummary = resume.summary && resume.summary.trim().length > 0;
   const hasExperience = resume.experience && resume.experience.length > 0;
   const hasEducation = resume.education && resume.education.length > 0;
-  const hasSkills = resume.skills && (resume.skills.technical.length > 0 || resume.skills.soft.length > 0);
+  const hasSkills = resume.skills && (resume.skills.technical.length > 0 || resume.skills.soft.length > 0 || resume.skills.tools.length > 0);
+  const hasLanguages = resume.skills.languages && resume.skills.languages.length > 0;
   const hasProjects = resume.projects && resume.projects.length > 0;
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;
@@ -26,135 +28,159 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
       padding: 0;
       box-sizing: border-box;
     }
-
+    
+    @page { 
+      size: letter; 
+      margin: 35pt 0 35pt 0;
+    }
+    @page :first { margin-top: 0; }  
     body {
-      font-family: Garamond, 'Times New Roman', serif;
-      font-size: ${config.typography.sizes.body}pt;
-      line-height: 1.7;
+      font-family: 'Garamond', 'Georgia', serif;
+      font-size: 9.5pt;
+      line-height: 1.6;
       color: ${config.colors.text};
       background: white;
-      padding: ${config.spacing.margins.top}pt ${config.spacing.margins.right}pt ${config.spacing.margins.bottom}pt ${config.spacing.margins.left}pt;
+      padding: 0 50pt;
     }
-
+    
     .header {
       text-align: center;
-      padding: 25pt 0;
-      margin-bottom: ${config.spacing.sectionGap}pt;
-      border-top: 3pt solid ${config.colors.primary};
-      border-bottom: 3pt solid ${config.colors.primary};
+      padding: 0pt 0 12pt 0;
+      margin-bottom: 18pt;
+      border-bottom: 1pt solid ${config.colors.border};
     }
-
+    
     .name {
-      font-size: ${config.typography.sizes.name}pt;
-      font-weight: ${config.typography.weights.bold};
-      color: ${config.colors.secondary};
-      margin-bottom: 10pt;
-      letter-spacing: 4pt;
-      text-transform: uppercase;
-    }
-
-    .contact-line {
-      font-size: ${config.typography.sizes.small}pt;
-      color: ${config.colors.textLight};
-      margin-top: 8pt;
-    }
-
-    .gold-divider {
-      width: 80pt;
-      height: 2pt;
-      background: linear-gradient(to right, transparent, ${config.colors.primary}, transparent);
-      margin: 15pt auto;
-    }
-
-    .section {
-      margin-bottom: ${config.spacing.sectionGap}pt;
-    }
-
-    .section-title {
-      font-size: ${config.typography.sizes.heading}pt;
-      font-weight: ${config.typography.weights.bold};
+      font-size: 28pt;
+      font-weight: normal;
       color: ${config.colors.primary};
-      margin-bottom: ${config.spacing.itemGap}pt;
+      margin: 12pt 0 8pt 0;
+      letter-spacing: 3pt;
+    }
+    
+    .title {
+      font-size: 11pt;
+      color: ${config.colors.textLight};
+      font-style: italic;
+      margin-bottom: 10pt;
+    }
+    
+    .contact-info {
+      font-size: 8.5pt;
+      color: ${config.colors.textLight};
+      line-height: 1.5;
+      margin-bottom: 4pt;
+    }
+    
+    .contact-links {
+      font-size: 8pt;
+      color: ${config.colors.textLight};
+      line-height: 1.4;
+    }
+    
+    .section {
+      margin-bottom: 16pt;
+    }
+    
+    .section-title {
+      font-size: 11pt;
+      font-weight: bold;
+      color: ${config.colors.primary};
       text-transform: uppercase;
       letter-spacing: 2pt;
+      margin-bottom: 10pt;
+      padding-bottom: 4pt;
       border-bottom: 1pt solid ${config.colors.border};
-      padding-bottom: 6pt;
     }
-
+    
     .job-item {
-      margin-bottom: ${config.spacing.itemGap + 2}pt;
+      margin-bottom: 10pt;
       page-break-inside: avoid;
     }
-
+    
     .job-title {
-      font-size: ${config.typography.sizes.subheading}pt;
-      font-weight: ${config.typography.weights.semibold};
-      color: ${config.colors.secondary};
-      font-style: italic;
+      font-size: 10pt;
+      font-weight: 600;
+      color: ${config.colors.text};
+      margin-bottom: 2pt;
+      line-height: 1.3;
     }
-
-    .company-line {
-      font-size: ${config.typography.sizes.small}pt;
+    
+    .company {
+      font-size: 9pt;
       color: ${config.colors.textLight};
-      margin-top: 3pt;
-      margin-bottom: 6pt;
+      font-style: italic;
+      margin-bottom: 2pt;
+      line-height: 1.3;
     }
-
+    
+    .date-location {
+      font-size: 8pt;
+      color: ${config.colors.textLight};
+      margin-bottom: 4pt;
+      line-height: 1.2;
+    }
+    
     .description {
-      margin-top: 6pt;
-      line-height: 1.7;
+      font-size: 9pt;
+      line-height: 1.6;
       text-align: justify;
-    }
-
-    .description ul {
-      margin-left: 20pt;
+      color: ${config.colors.text};
       margin-top: 4pt;
     }
-
+    
+    .description ul {
+      margin: 2pt 0;
+      padding-left: 12pt;
+    }
+    
     .description li {
-      margin-bottom: 3pt;
+      margin-bottom: 2pt;
+      padding-left: 0;
     }
-
-    .skills-list {
-      columns: 2;
-      column-gap: 25pt;
+    
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10pt;
     }
-
+    
     .skill-item {
-      font-size: ${config.typography.sizes.small}pt;
-      margin-bottom: 5pt;
-      break-inside: avoid;
+      font-size: 9pt;
       color: ${config.colors.text};
+      padding: 5pt 12pt;
+      border: 1pt solid ${config.colors.border};
+      background-color: ${config.colors.primary}05;
     }
-
-    .skill-item::before {
-      content: "▸ ";
-      color: ${config.colors.primary};
-      font-weight: bold;
-    }
-
-    @page {
-      size: letter;
-      margin: 0;
+    
+    .tech-list {
+      font-size: 8pt;
+      color: ${config.colors.textLight};
+      margin-top: 2pt;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <div class="header">
     <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
-    <div class="gold-divider"></div>
-    <div class="contact-line">
-      ${resume.contactInfo?.email || 'email@example.com'} •
-      ${resume.contactInfo?.phone || '(555) 123-4567'} •
+    ${hasContactInfo && resume.contactInfo.title ? `<div class="title">${resume.contactInfo.title}</div>` : ''}
+    <div class="contact-info">
+      ${resume.contactInfo?.email || 'email@example.com'} • 
+      ${resume.contactInfo?.phone || '(555) 123-4567'} • 
       ${resume.contactInfo?.city || 'City'}, ${resume.contactInfo?.country || 'Country'}
     </div>
+    ${(resume.contactInfo?.linkedin || resume.contactInfo?.github || resume.contactInfo?.website || resume.contactInfo?.customLink?.url) ? `
+    <div class="contact-links">
+      ${resume.contactInfo?.linkedin ? `${resume.contactInfo.linkedin}` : ''}${resume.contactInfo?.github ? `${resume.contactInfo?.linkedin ? ' • ' : ''}${resume.contactInfo.github}` : ''}${resume.contactInfo?.website ? `${(resume.contactInfo?.linkedin || resume.contactInfo?.github) ? ' • ' : ''}${resume.contactInfo.website}` : ''}${resume.contactInfo?.customLink?.url ? `${(resume.contactInfo?.linkedin || resume.contactInfo?.github || resume.contactInfo?.website) ? ' • ' : ''}${resume.contactInfo.customLink.label || 'Website'}: ${resume.contactInfo.customLink.url}` : ''}
+    </div>
+    ` : ''}
   </div>
 
   ${hasSummary ? `
   <div class="section">
-    <div class="section-title">Executive Summary</div>
-    <p style="text-align: justify; line-height: 1.7;">${resume.summary}</p>
+    <div class="section-title">Executive Profile</div>
+    <div class="description">${resume.summary}</div>
   </div>
   ` : ''}
 
@@ -164,9 +190,8 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
     ${resume.experience.map(exp => `
       <div class="job-item">
         <div class="job-title">${exp.jobTitle}</div>
-        <div class="company-line">
-          ${exp.company} • ${exp.location} • ${exp.startDate} – ${exp.isCurrentJob ? 'Present' : exp.endDate}
-        </div>
+        <div class="company">${exp.company}</div>
+        <div class="date-location">${exp.startDate} – ${exp.isCurrentJob ? 'Present' : exp.endDate} | ${exp.location}</div>
         ${exp.description ? `<div class="description">${exp.description}</div>` : ''}
       </div>
     `).join('')}
@@ -179,10 +204,9 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
     ${resume.education.map(edu => `
       <div class="job-item">
         <div class="job-title">${edu.degree}</div>
-        <div class="company-line">
-          ${edu.institution} • ${edu.location} • ${edu.isCurrentlyStudying ? 'Expected ' : ''}${edu.graduationDate}
-        </div>
-        ${edu.gpa ? `<div style="margin-top: 3pt; font-size: ${config.typography.sizes.small}pt;">GPA: ${edu.gpa}</div>` : ''}
+        <div class="company">${edu.institution}</div>
+        <div class="date-location">${edu.isCurrentlyStudying ? 'Expected ' : ''}${edu.graduationDate} | ${edu.location}${edu.gpa ? ` | GPA: ${edu.gpa}` : ''}</div>
+        ${edu.additionalInfo ? `<div class="description">${edu.additionalInfo}</div>` : ''}
       </div>
     `).join('')}
   </div>
@@ -191,16 +215,19 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
   ${hasSkills ? `
   <div class="section">
     <div class="section-title">Core Competencies</div>
-    <div class="skills-list">
-      ${resume.skills.technical.map(skill => `
-        <div class="skill-item">${skill.name}</div>
-      `).join('')}
-      ${resume.skills.soft.map(skill => `
-        <div class="skill-item">${skill.name}</div>
-      `).join('')}
-      ${resume.skills.tools.map(skill => `
-        <div class="skill-item">${skill.name}</div>
-      `).join('')}
+    <div class="skills-grid">
+      ${resume.skills.technical.map(skill => `<span class="skill-item">${skill.name}</span>`).join('')}
+      ${resume.skills.tools.map(skill => `<span class="skill-item">${skill.name}</span>`).join('')}
+      ${resume.skills.soft.map(skill => `<span class="skill-item">${skill.name}</span>`).join('')}
+    </div>
+  </div>
+  ` : ''}
+
+  ${hasLanguages ? `
+  <div class="section">
+    <div class="section-title">Languages</div>
+    <div class="skills-grid">
+      ${resume.skills.languages.map(skill => `<span class="skill-item">${skill.name}${skill.level ? ` (${skill.level})` : ''}</span>`).join('')}
     </div>
   </div>
   ` : ''}
@@ -208,12 +235,13 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
   ${hasProjects ? `
   <div class="section">
     <div class="section-title">Key Projects</div>
-    ${resume.projects!.map((project: any) => `
+    ${resume.projects.map(project => `
       <div class="job-item">
         <div class="job-title">${project.name}</div>
-        ${project.date ? `<div class="company-line">${project.date}</div>` : ''}
-        ${project.description ? `<p style="margin-top: 4pt;">${project.description}</p>` : ''}
-        ${project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 ? `<p style="margin-top: 4pt; font-size: ${config.typography.sizes.small}pt; color: ${config.colors.textLight};">Technologies: ${project.technologies.join(', ')}</p>` : ''}
+        ${project.date ? `<div class="date-location">${project.date}</div>` : ''}
+        ${project.description ? `<div class="description">${project.description}</div>` : ''}
+        ${project.technologies && Array.isArray(project.technologies) && project.technologies.length > 0 ? `<div class="tech-list">Technologies: ${project.technologies.join(', ')}</div>` : ''}
+        ${project.link ? `<div class="tech-list">${project.link}</div>` : ''}
       </div>
     `).join('')}
   </div>
@@ -222,10 +250,12 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
   ${hasCertifications ? `
   <div class="section">
     <div class="section-title">Certifications</div>
-    ${resume.certifications!.map((cert: any) => `
+    ${resume.certifications.map(cert => `
       <div class="job-item">
         <div class="job-title">${cert.name}</div>
-        <div class="company-line">${cert.issuer}${cert.dateIssued ? ` • ${cert.dateIssued}` : ''}</div>
+        <div class="date-location">${cert.issuer}${cert.dateIssued ? ` | ${cert.dateIssued}` : ''}${cert.expiryDate && !cert.doesNotExpire ? ` – ${cert.expiryDate}` : ''}</div>
+        ${cert.credentialId ? `<div class="date-location">Credential ID: ${cert.credentialId}</div>` : ''}
+        ${cert.credentialUrl ? `<div class="tech-list">${cert.credentialUrl}</div>` : ''}
       </div>
     `).join('')}
   </div>
@@ -233,12 +263,26 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
 
   ${hasAwards ? `
   <div class="section">
-    <div class="section-title">Awards & Recognition</div>
-    ${resume.awards!.map((award: any) => `
+    <div class="section-title">Awards & Honors</div>
+    ${resume.awards.map(award => `
       <div class="job-item">
         <div class="job-title">${award.title}</div>
-        <div class="company-line">${award.issuer}${award.date ? ` • ${award.date}` : ''}</div>
-        ${award.description ? `<p style="margin-top: 4pt;">${award.description}</p>` : ''}
+        <div class="date-location">${award.issuer}${award.date ? ` | ${award.date}` : ''}</div>
+        ${award.description ? `<div class="description">${award.description}</div>` : ''}
+      </div>
+    `).join('')}
+  </div>
+  ` : ''}
+
+  ${hasVolunteer ? `
+  <div class="section">
+    <div class="section-title">Board & Volunteer Service</div>
+    ${resume.volunteer.map(vol => `
+      <div class="job-item">
+        <div class="job-title">${vol.role}</div>
+        <div class="company">${vol.organization}</div>
+        <div class="date-location">${vol.startDate} – ${vol.isCurrentRole ? 'Present' : vol.endDate} | ${vol.location}</div>
+        ${vol.description ? `<div class="description">${vol.description}</div>` : ''}
       </div>
     `).join('')}
   </div>
