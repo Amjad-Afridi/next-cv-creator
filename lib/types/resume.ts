@@ -26,6 +26,7 @@ export interface Resume {
   publications?: Publication[];
   awards?: Award[];
   volunteer?: Volunteer[];
+  interests?: string[];
   references: References;
   
   // Template & Styling
@@ -40,6 +41,7 @@ export interface Resume {
 export interface ContactInfo {
   firstName: string;
   lastName: string;
+  professionalTitle?: string;
   email: string;
   phone: string;
   city: string;
@@ -74,8 +76,6 @@ export interface Education {
   gpa?: string;
   additionalInfo?: string;
 }
-
-// Find and replace the Skills interface with this:
 
 export interface Skills {
   technical: SkillItem[];

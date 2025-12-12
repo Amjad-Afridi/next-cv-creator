@@ -23,6 +23,7 @@ const initialResume: Partial<Resume> = {
   contactInfo: {
     firstName: '',
     lastName: '',
+    professionalTitle: '',
     email: '',
     phone: '',
     city: '',
@@ -43,6 +44,7 @@ const initialResume: Partial<Resume> = {
   publications: [],
   awards: [],
   volunteer: [],
+  interests: [],
   references: {
     showReferences: false,
     referenceList: [],

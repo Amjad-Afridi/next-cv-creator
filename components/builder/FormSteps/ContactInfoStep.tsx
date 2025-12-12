@@ -82,6 +82,26 @@ export default function ContactInfoStep() {
             </div>
           </div>
 
+          {/* Professional Title */}
+          <div className="space-y-2">
+            <Label htmlFor="professionalTitle" className="flex items-center gap-2">
+              Professional Title
+              <span className="text-xs text-muted-foreground font-normal">(appears under your name)</span>
+            </Label>
+            <Input
+              id="professionalTitle"
+              placeholder="e.g., Senior Software Engineer, Full Stack Developer, Product Designer"
+              {...register("professionalTitle")}
+              className={errors.professionalTitle ? "border-red-500" : ""}
+            />
+            {errors.professionalTitle && (
+              <p className="text-sm text-red-500">{errors.professionalTitle.message}</p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              This helps recruiters quickly understand your role (e.g., "Senior Frontend Developer | React Specialist")
+            </p>
+          </div>
+
           {/* Email and Phone */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">

@@ -16,6 +16,7 @@ export function renderBoldCreativeHeader(resume: Resume, template: Template): st
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;
   const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
+  const hasInterests = resume.interests && resume.interests.length > 0;
 
   return `
 <!DOCTYPE html>
@@ -61,11 +62,14 @@ export function renderBoldCreativeHeader(resume: Resume, template: Template): st
       line-height: 1.1;
     }
     
-    .title {
-      font-size: 12pt;
-      font-weight: 300;
-      opacity: 0.95;
+    .professional-title {
+      font-size: 13pt;
+      color: white;
+      font-weight: 400;
+      opacity: 0.92;
       margin-bottom: 8pt;
+      line-height: 1.2;
+      letter-spacing: 0.5pt;
     }
     
     .contact-info {
@@ -170,7 +174,7 @@ export function renderBoldCreativeHeader(resume: Resume, template: Template): st
 <body>
   <div class="header">
     <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
-    <div class="title">${hasContactInfo && resume.contactInfo.title ? resume.contactInfo.title : 'Professional Title'}</div>
+    ${resume.contactInfo?.professionalTitle ? `<div class="professional-title">${resume.contactInfo.professionalTitle}</div>` : ''}
     <div class="contact-info">
       ${resume.contactInfo?.email || 'email@example.com'} • 
       ${resume.contactInfo?.phone || '(555) 123-4567'} • 
@@ -292,6 +296,15 @@ export function renderBoldCreativeHeader(resume: Resume, template: Template): st
           ${vol.description ? `<div class="description">${vol.description}</div>` : ''}
         </div>
       `).join('')}
+    </div>
+    ` : ''}
+
+    ${hasInterests ? `
+    <div class="section">
+      <div class="section-title">Interests</div>
+      <div class="skills-grid">
+        ${resume.interests.map(interest => `<span class="skill-tag">${interest}</span>`).join('')}
+      </div>
     </div>
     ` : ''}
   </div>

@@ -16,6 +16,7 @@ export function renderElegantProfessional(resume: Resume, template: Template): s
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;
   const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
+  const hasInterests = resume.interests && resume.interests.length > 0;
 
   return `
 <!DOCTYPE html>
@@ -143,6 +144,15 @@ export function renderElegantProfessional(resume: Resume, template: Template): s
       margin-bottom: 4pt;
       break-inside: avoid;
     }
+
+    .professional-title {
+      font-size: 10pt;
+      color: ${config.colors.textLight};
+      margin-bottom: 8pt;
+      line-height: 1.3;
+      font-family: 'Playfair Display', serif;
+      font-weight: 300;
+    }
     
     .tech-list {
       font-size: 8pt;
@@ -155,6 +165,7 @@ export function renderElegantProfessional(resume: Resume, template: Template): s
 <body>
   <div class="header">
     <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
+    ${resume.contactInfo?.professionalTitle ? `<div class="professional-title">${resume.contactInfo.professionalTitle}</div>` : ''}
     <div class="contact-info">
       ${resume.contactInfo?.email || 'email@example.com'} • 
       ${resume.contactInfo?.phone || '(555) 123-4567'} • 
@@ -275,6 +286,15 @@ export function renderElegantProfessional(resume: Resume, template: Template): s
         ${vol.description ? `<div class="description">${vol.description}</div>` : ''}
       </div>
     `).join('')}
+  </div>
+  ` : ''}
+
+  ${hasInterests ? `
+  <div class="section">
+    <div class="section-title">Interests & Hobbies</div>
+    <div class="skills-list">
+      ${resume.interests.map(interest => `<div class="skill-item">• ${interest}</div>`).join('')}
+    </div>
   </div>
   ` : ''}
 </body>

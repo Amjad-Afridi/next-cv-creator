@@ -16,6 +16,7 @@ export function renderModernTwoColumn(resume: Resume, template: Template): strin
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;
   const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
+  const hasInterests = resume.interests && resume.interests.length > 0;
 
   return `
 <!DOCTYPE html>
@@ -77,12 +78,6 @@ export function renderModernTwoColumn(resume: Resume, template: Template): strin
       line-height: 1.1;
     }
     
-    .title {
-      font-size: 10.5pt;
-      color: ${config.colors.textLight};
-      margin-bottom: 9pt;
-    }
-    
     .sidebar-section {
       margin-bottom: 9pt;
     }
@@ -113,6 +108,15 @@ export function renderModernTwoColumn(resume: Resume, template: Template): strin
       color: white;
       border-radius: 3pt;
       line-height: 1.1;
+    }
+
+    .professional-title {
+      font-size: 10.5pt;
+      color: ${config.colors.textLight};
+      font-weight: 500;
+      margin-bottom: 9pt;
+      line-height: 1.2;
+      letter-spacing: 0.3pt;
     }
     
     .education-item {
@@ -198,7 +202,7 @@ export function renderModernTwoColumn(resume: Resume, template: Template): strin
   <div class="content">
     <div class="sidebar">
       <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
-      <div class="title">${hasContactInfo && resume.contactInfo.title ? resume.contactInfo.title : 'Professional Title'}</div>
+      ${resume.contactInfo?.professionalTitle ? `<div class="professional-title">${resume.contactInfo.professionalTitle}</div>` : ''}
 
       <div class="sidebar-section">
         <div class="sidebar-title">Contact</div>
@@ -319,6 +323,15 @@ export function renderModernTwoColumn(resume: Resume, template: Template): strin
             ${vol.description ? `<div class="description">${vol.description}</div>` : ''}
           </div>
         `).join('')}
+      </div>
+      ` : ''}
+
+      ${hasInterests ? `
+      <div class="section">
+        <div class="section-title">Interests</div>
+        <div>
+          ${resume.interests.map(interest => `<span class="skill-tag">${interest}</span>`).join('')}
+        </div>
       </div>
       ` : ''}
     </div>

@@ -16,6 +16,7 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;
   const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
+  const hasInterests = resume.interests && resume.interests.length > 0;
 
   return `
 <!DOCTYPE html>
@@ -56,13 +57,6 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
       color: ${config.colors.primary};
       margin: 12pt 0 8pt 0;
       letter-spacing: 3pt;
-    }
-    
-    .title {
-      font-size: 11pt;
-      color: ${config.colors.textLight};
-      font-style: italic;
-      margin-bottom: 10pt;
     }
     
     .contact-info {
@@ -152,6 +146,15 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
       border: 1pt solid ${config.colors.border};
       background-color: ${config.colors.primary}05;
     }
+
+    .professional-title {
+      font-size: 11pt;
+      color: ${config.colors.textLight};
+      margin-bottom: 10pt;
+      line-height: 1.2;
+      font-weight: 300;
+      letter-spacing: 0.5pt;
+    }
     
     .tech-list {
       font-size: 8pt;
@@ -164,7 +167,7 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
 <body>
   <div class="header">
     <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
-    ${hasContactInfo && resume.contactInfo.title ? `<div class="title">${resume.contactInfo.title}</div>` : ''}
+    ${resume.contactInfo?.professionalTitle ? `<div class="professional-title">${resume.contactInfo.professionalTitle}</div>` : ''}
     <div class="contact-info">
       ${resume.contactInfo?.email || 'email@example.com'} • 
       ${resume.contactInfo?.phone || '(555) 123-4567'} • 
@@ -285,6 +288,15 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
         ${vol.description ? `<div class="description">${vol.description}</div>` : ''}
       </div>
     `).join('')}
+  </div>
+  ` : ''}
+
+  ${hasInterests ? `
+  <div class="section">
+    <div class="section-title">Interests & Hobbies</div>
+    <div class="skills-grid">
+      ${resume.interests.map(interest => `<span class="skill-item">${interest}</span>`).join('')}
+    </div>
   </div>
   ` : ''}
 </body>

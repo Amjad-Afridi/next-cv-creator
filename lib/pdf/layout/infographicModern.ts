@@ -16,6 +16,7 @@ export function renderInfographicModern(resume: Resume, template: Template): str
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;
   const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
+  const hasInterests = resume.interests && resume.interests.length > 0;
 
   return `
 <!DOCTYPE html>
@@ -82,12 +83,6 @@ export function renderInfographicModern(resume: Resume, template: Template): str
       color: ${config.colors.primary};
       margin-bottom: 2pt;
       line-height: 1.1;
-    }
-    
-    .title {
-      font-size: 10pt;
-      color: ${config.colors.textLight};
-      margin-bottom: 4pt;
     }
     
     .contact-item {
@@ -211,6 +206,14 @@ export function renderInfographicModern(resume: Resume, template: Template): str
       color: ${config.colors.textLight};
       margin-top: 2pt;
     }
+
+    .professional-title {
+      font-size: 10pt;
+      color: ${config.colors.primary};
+      font-weight: 500;
+      margin-bottom: 4pt;
+      line-height: 1.2;
+    }
   </style>
 </head>
 <body>
@@ -220,7 +223,7 @@ export function renderInfographicModern(resume: Resume, template: Template): str
     <div class="sidebar">
       <div class="profile-section">
         <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
-        <div class="title">Professional</div>
+        ${resume.contactInfo?.professionalTitle ? `<div class="professional-title">${resume.contactInfo.professionalTitle}</div>` : ''}
         <div style="margin-top: 10pt;">
           <div class="contact-item">${resume.contactInfo?.email || 'email@example.com'}</div>
           <div class="contact-item">${resume.contactInfo?.phone || '(555) 123-4567'}</div>
@@ -356,6 +359,15 @@ export function renderInfographicModern(resume: Resume, template: Template): str
             ${vol.description ? `<div class="description">${vol.description}</div>` : ''}
           </div>
         `).join('')}
+      </div>
+      ` : ''}
+
+      ${hasInterests ? `
+      <div class="section">
+        <div class="section-title">Interests</div>
+        <div class="skills-grid">
+          ${resume.interests.map(interest => `<span class="skill-item">${interest}</span>`).join('')}
+        </div>
       </div>
       ` : ''}
     </div>

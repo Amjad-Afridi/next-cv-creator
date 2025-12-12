@@ -16,6 +16,7 @@ export function renderClassicATS(resume: Resume, template: Template): string {
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;
   const hasVolunteer = resume.volunteer && resume.volunteer.length > 0;
+  const hasInterests = resume.interests && resume.interests.length > 0;
 
   return `
 <!DOCTYPE html>
@@ -54,12 +55,21 @@ export function renderClassicATS(resume: Resume, template: Template): string {
       font-size: 22pt;
       font-weight: bold;
       color: ${config.colors.primary};
-      margin-bottom: 5pt;
+      margin-bottom: 3pt;
       text-transform: uppercase;
       letter-spacing: 1pt;
       line-height: 1.1;
     }
-    
+
+    .professional-title {
+      font-size: 10pt;
+      color: ${config.colors.textLight};
+      font-weight: 500;
+      margin-bottom: 6pt;
+      line-height: 1.3;
+      letter-spacing: 0.3pt;
+    }
+
     .contact-info {
       font-size: 8.5pt;
       color: ${config.colors.textLight};
@@ -162,9 +172,10 @@ export function renderClassicATS(resume: Resume, template: Template): string {
 <body>
   <div class="header">
     <h1>${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</h1>
+    ${resume.contactInfo?.professionalTitle ? `<div class="professional-title">${resume.contactInfo.professionalTitle}</div>` : ''}
     <div class="contact-info">
-      ${resume.contactInfo?.email || 'email@example.com'} | 
-      ${resume.contactInfo?.phone || '(555) 123-4567'} | 
+      ${resume.contactInfo?.email || 'email@example.com'} |
+      ${resume.contactInfo?.phone || '(555) 123-4567'} |
       ${resume.contactInfo?.city || 'City'}, ${resume.contactInfo?.country || 'Country'}
     </div>
     ${(resume.contactInfo?.linkedin || resume.contactInfo?.github || resume.contactInfo?.website || resume.contactInfo?.customLink?.url) ? `
@@ -290,6 +301,15 @@ export function renderClassicATS(resume: Resume, template: Template): string {
         ${vol.description ? `<div class="description">${vol.description}</div>` : ''}
       </div>
     `).join('')}
+  </div>
+  ` : ''}
+
+  ${hasInterests ? `
+  <div class="section">
+    <div class="section-title">Interests & Hobbies</div>
+    <div class="skills-grid">
+      ${resume.interests.map(interest => `<span class="skill-item">${interest}</span>`).join('')}
+    </div>
   </div>
   ` : ''}
 </body>

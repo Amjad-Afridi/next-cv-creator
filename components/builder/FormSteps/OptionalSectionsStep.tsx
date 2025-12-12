@@ -6,11 +6,12 @@ import { useState } from "react";
 import { useResumeStore } from "@/lib/store/resumeStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, ArrowLeft, FolderOpen, Award, Trophy, Heart, Plus } from "lucide-react";
+import { ArrowRight, ArrowLeft, FolderOpen, Award, Trophy, Heart, Sparkles } from "lucide-react";
 import ProjectsSection from "@/components/builder/OptionalSections/ProjectsSection";
 import CertificationsSection from "@/components/builder/OptionalSections/CertificationsSection";
 import AwardsSection from "@/components/builder/OptionalSections/AwardsSection";
 import VolunteerSection from "@/components/builder/OptionalSections/VolunteerSection";
+import InterestsSection from "@/components/builder/OptionalSections/InterestsSection";
 
 export default function OptionalSectionsStep() {
   const { setCurrentStep } = useResumeStore();
@@ -64,6 +65,13 @@ export default function OptionalSectionsStep() {
       description: "Community service and volunteer work",
       icon: Heart,
       component: VolunteerSection,
+    },
+    {
+      id: "interests",
+      title: "Interests & Hobbies",
+      description: "Personal interests that show your personality",
+      icon: Sparkles,
+      component: InterestsSection,
     },
   ];
 
