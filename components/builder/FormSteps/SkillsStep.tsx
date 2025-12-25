@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowRight, ArrowLeft, X, Lightbulb, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState, KeyboardEvent } from "react";
+import { useState, useEffect, KeyboardEvent } from "react";
 import { SkillItem } from "@/lib/types/resume";
 
 export default function SkillsStep() {
@@ -32,6 +32,19 @@ export default function SkillsStep() {
       tools: (currentResume.skills?.tools || []) as any,
     },
   });
+
+  // Watch all form fields for auto-save
+  const watchedData = watch();
+
+  // Auto-save with debouncing (500ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // Auto-save skills data
+      updateSkills(watchedData);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [watchedData, updateSkills]);
 
   const onSubmit = (data: SkillsFormData) => {
     updateSkills(data);

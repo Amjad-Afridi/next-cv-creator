@@ -17,7 +17,7 @@ export default function Home() {
             <Link href="#features" className="text-sm hover:text-primary">
               Features
             </Link>
-            <Link href="#templates" className="text-sm hover:text-primary">
+            <Link href="/templates" className="text-sm hover:text-primary">
               Templates
             </Link>
           </nav>
@@ -59,17 +59,18 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-center mb-12">Why Choose Our CV Builder?</h2>
         
         <div className="grid md:grid-cols-3 gap-8">
-          <FeatureCard 
+          <FeatureCard
             icon={<FileText />}
             title="Professional Templates"
             description="Choose from beautifully designed templates suitable for any industry"
+            link="/templates"
           />
-          <FeatureCard 
+          <FeatureCard
             icon={<Download />}
             title="Instant PDF Download"
             description="Download your resume as a high-quality PDF with one click"
           />
-          <FeatureCard 
+          <FeatureCard
             icon={<Sparkles />}
             title="Easy to Use"
             description="Intuitive interface with real-time preview as you build"
@@ -102,14 +103,31 @@ export default function Home() {
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
-  return (
-    <div className="bg-white p-6 rounded-lg border hover:shadow-lg transition">
+function FeatureCard({ icon, title, description, link }: { icon: React.ReactNode; title: string; description: string; link?: string }) {
+  const content = (
+    <>
       <div className="h-12 w-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-4">
         {icon}
       </div>
       <h3 className="font-semibold text-lg mb-2">{title}</h3>
       <p className="text-slate-600">{description}</p>
+    </>
+  );
+
+  if (link) {
+    return (
+      <Link href={link} className="bg-white p-6 rounded-lg border hover:shadow-lg transition block group">
+        {content}
+        <div className="mt-4 text-primary text-sm font-medium group-hover:underline">
+          Browse Templates →
+        </div>
+      </Link>
+    );
+  }
+
+  return (
+    <div className="bg-white p-6 rounded-lg border hover:shadow-lg transition">
+      {content}
     </div>
   );
 }

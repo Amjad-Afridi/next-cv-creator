@@ -13,6 +13,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowRight, ArrowLeft, Plus, Trash2, Briefcase, Lightbulb } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { useEffect } from "react";
 
 // Schema for the entire experience array
 const experienceArraySchema = z.object({
@@ -64,6 +65,26 @@ export default function ExperienceStep() {
     control,
     name: "experience",
   });
+
+  // Watch all form fields for auto-save
+  const watchedData = watch();
+
+  // Auto-save with debouncing (500ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (watchedData.experience && watchedData.experience.length > 0) {
+        // Only auto-save if there's at least some data
+        const hasData = watchedData.experience.some(
+          exp => exp.jobTitle || exp.company || exp.description
+        );
+        if (hasData) {
+          updateExperience(watchedData.experience);
+        }
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [watchedData, updateExperience]);
 
   const onSubmit = (data: ExperienceFormData) => {
     updateExperience(data.experience);

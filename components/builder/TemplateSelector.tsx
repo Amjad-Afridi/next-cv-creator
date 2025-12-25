@@ -240,7 +240,7 @@ export default function TemplateSelector({
         {/* All Templates Tab */}
         <TabsContent value="all" className="mt-4 md:mt-6">
           {filteredTemplates.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
               {filteredTemplates.map((template) => (
                 <TemplateCard
                   key={template.id}
@@ -268,7 +268,7 @@ export default function TemplateSelector({
 
         {/* Popular Templates Tab */}
         <TabsContent value="popular" className="mt-4 md:mt-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
             {popularTemplates.map((template) => (
               <TemplateCard
                 key={template.id}

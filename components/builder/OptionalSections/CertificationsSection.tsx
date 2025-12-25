@@ -22,7 +22,7 @@ interface CertificationForm {
 }
 
 export default function CertificationsSection() {
-  const { currentResume } = useResumeStore();
+  const { currentResume, updateCertifications } = useResumeStore();
 
   const { register, control, watch } = useForm<CertificationForm>({
     defaultValues: {
@@ -44,19 +44,20 @@ export default function CertificationsSection() {
     name: "certifications",
   });
 
-  // Auto-save
-  const watchedCerts = watch("certifications");
+  // Auto-save on change - watch all form values to ensure deep changes are detected
+  const formValues = watch();
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      useResumeStore.setState((state) => ({
-        currentResume: {
-          ...state.currentResume,
-          certifications: watchedCerts,
-        },
-      }));
+      const certificationsData = formValues.certifications || [];
+
+      // Filter out empty certifications
+      const filteredCerts = certificationsData.filter((cert: any) => cert.name || cert.issuer);
+      updateCertifications(filteredCerts);
     }, 500);
     return () => clearTimeout(timer);
-  }, [watchedCerts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(formValues.certifications), updateCertifications]);
 
   return (
     <div className="space-y-4">

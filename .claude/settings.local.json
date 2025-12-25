@@ -6,7 +6,9 @@
       "Bash(npm run build:*)",
       "Bash(grep:*)",
       "Bash(done)",
-      "Bash(find lib/pdf/layout -name \"*.ts\" -exec sh -c 'echo \"\"=== {} ===\"\" && grep -A 7 \"\"\\.professional-title {\"\" \"\"{}\"\"' ;)"
+      "Bash(find lib/pdf/layout -name \"*.ts\" -exec sh -c 'echo \"\"=== {} ===\"\" && grep -A 7 \"\"\\.professional-title {\"\" \"\"{}\"\"' ;)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []

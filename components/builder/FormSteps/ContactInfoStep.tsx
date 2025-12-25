@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Globe, Linkedin, Github, Link as LinkIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import ProfileImageUpload from "@/components/builder/ProfileImageUpload";
 
 export default function ContactInfoStep() {
   const { currentResume, updateContactInfo, setCurrentStep } = useResumeStore();
@@ -20,11 +21,33 @@ export default function ContactInfoStep() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<ContactInfoFormData>({
     resolver: zodResolver(contactInfoSchema),
     defaultValues: currentResume.contactInfo,
   });
+
+  // Watch all form fields for auto-save
+  const watchedData = watch();
+
+  // Auto-save with debouncing (500ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // Only auto-save if data is valid (basic check)
+      if (watchedData.firstName || watchedData.lastName || watchedData.email) {
+        const cleanedData = {
+          ...watchedData,
+          customLink: watchedData.customLinkLabel && watchedData.customLinkUrl
+            ? { label: watchedData.customLinkLabel, url: watchedData.customLinkUrl }
+            : undefined
+        };
+        updateContactInfo(cleanedData);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [watchedData, updateContactInfo]);
 
   const onSubmit = (data: ContactInfoFormData) => {
     // Clean up customLink if it's empty
@@ -169,6 +192,13 @@ export default function ContactInfoStep() {
               )}
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Profile Photo */}
+      <Card>
+        <CardContent className="pt-6">
+          <ProfileImageUpload />
         </CardContent>
       </Card>
 

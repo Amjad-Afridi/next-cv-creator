@@ -23,7 +23,7 @@ interface ProjectForm {
 }
 
 export default function ProjectsSection() {
-  const { currentResume, updateExperience } = useResumeStore();
+  const { currentResume, updateProjects } = useResumeStore();
 
   const { register, control, watch } = useForm<ProjectForm>({
     defaultValues: {
@@ -51,27 +51,28 @@ export default function ProjectsSection() {
     name: "projects",
   });
 
-  // Auto-save on change
-  const watchedProjects = watch("projects");
+  // Auto-save on change - watch all form values to ensure deep changes are detected
+  const formValues = watch();
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      // Convert technologies from string to array
-      const convertedProjects = watchedProjects.map((project: any) => ({
-        ...project,
-        technologies: project.technologies
-          ? project.technologies.split(',').map((t: string) => t.trim())
-          : [],
-      }));
+      const projectsData = formValues.projects || [];
 
-      useResumeStore.setState((state) => ({
-        currentResume: {
-          ...state.currentResume,
-          projects: convertedProjects as any,
-        },
-      }));
+      // Filter out empty projects and convert technologies from string to array
+      const convertedProjects = projectsData
+        .filter((project: any) => project.name || project.description || project.technologies)
+        .map((project: any) => ({
+          ...project,
+          technologies: project.technologies
+            ? project.technologies.split(',').map((t: string) => t.trim())
+            : [],
+        }));
+
+      updateProjects(convertedProjects as any);
     }, 500);
     return () => clearTimeout(timer);
-  }, [watchedProjects]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(formValues.projects), updateProjects]);
 
   return (
     <div className="space-y-4">

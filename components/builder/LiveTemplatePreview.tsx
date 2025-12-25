@@ -6,6 +6,7 @@ import { getTemplateById, getAllTemplates } from "@/lib/templates/templateUtils"
 import { generateResumeHTML } from "@/lib/pdf/templateRenderer";
 import { HTMLPreview } from "./HTMLPreview";
 import { useMemo, useState } from "react";
+import { sampleResume } from "@/lib/data/sampleResume";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Download, Loader2, AlertCircle } from "lucide-react";
@@ -38,15 +39,35 @@ export function LiveTemplatePreview() {
     return calculateResumeCompletion(currentResume);
   }, [currentResume]);
 
+  // Check if user has started filling data
+  const hasUserData = useMemo(() => {
+    return !!(
+      currentResume.contactInfo?.firstName ||
+      currentResume.contactInfo?.lastName ||
+      currentResume.contactInfo?.email ||
+      (currentResume.experience && currentResume.experience.length > 0) ||
+      (currentResume.education && currentResume.education.length > 0)
+    );
+  }, [currentResume]);
+
+  // Use sample data if user hasn't filled anything yet
+  const displayResume = useMemo(() => {
+    return hasUserData ? currentResume : {
+      ...sampleResume,
+      template: currentResume.template || 'modern-two-column',
+      styling: currentResume.styling || sampleResume.styling
+    };
+  }, [currentResume, hasUserData]);
+
   const previewHTML = useMemo(() => {
     if (!template) return '';
     try {
-      return generateResumeHTML(currentResume as any, template);
+      return generateResumeHTML(displayResume as any, template);
     } catch (error) {
       console.error('Preview error:', error);
       return '<html><body><p>Error generating preview</p></body></html>';
     }
-  }, [currentResume, template]);
+  }, [displayResume, template]);
 
   const goToPrevTemplate = () => {
     const prevIndex = currentTemplateIndex > 0 

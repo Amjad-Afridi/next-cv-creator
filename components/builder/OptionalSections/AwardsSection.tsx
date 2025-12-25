@@ -22,7 +22,7 @@ interface AwardForm {
 }
 
 export default function AwardsSection() {
-  const { currentResume } = useResumeStore();
+  const { currentResume, updateAwards } = useResumeStore();
 
   const { register, control, watch } = useForm<AwardForm>({
     defaultValues: {
@@ -43,19 +43,20 @@ export default function AwardsSection() {
     name: "awards",
   });
 
-  // Auto-save
-  const watchedAwards = watch("awards");
+  // Auto-save on change - watch all form values to ensure deep changes are detected
+  const formValues = watch();
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      useResumeStore.setState((state) => ({
-        currentResume: {
-          ...state.currentResume,
-          awards: watchedAwards,
-        },
-      }));
+      const awardsData = formValues.awards || [];
+
+      // Filter out empty awards
+      const filteredAwards = awardsData.filter((award: any) => award.title || award.issuer);
+      updateAwards(filteredAwards);
     }, 500);
     return () => clearTimeout(timer);
-  }, [watchedAwards]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(formValues.awards), updateAwards]);
 
   return (
     <div className="space-y-4">

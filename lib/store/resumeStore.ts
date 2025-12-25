@@ -13,6 +13,12 @@ interface ResumeStore {
   updateEducation: (education: Education[]) => void;
   updateSkills: (skills: Partial<Skills>) => void;
   updateTemplate: (template: string) => void;
+  updateInterests: (interests: string[]) => void;
+  updateProjects: (projects: any[]) => void;
+  updateCertifications: (certifications: any[]) => void;
+  updateAwards: (awards: any[]) => void;
+  updateVolunteer: (volunteer: any[]) => void;
+  updateStyling: (styling: Partial<any>) => void;
   resetResume: () => void;
   initializeResume: () => void;
 }
@@ -54,6 +60,7 @@ const initialResume: Partial<Resume> = {
     primaryColor: '#000000',
     fontSize: 'medium',
     sectionOrder: ['experience', 'education', 'skills', 'projects'],
+    showProfileImage: false,
   },
 };
 
@@ -130,6 +137,69 @@ export const useResumeStore = create<ResumeStore>()(
           currentResume: {
             ...state.currentResume,
             template,
+          },
+        }));
+      },
+
+      updateInterests: (interests) => {
+        console.log('✅ Updating interests');
+        set((state) => ({
+          currentResume: {
+            ...state.currentResume,
+            interests,
+          },
+        }));
+      },
+
+      updateProjects: (projects) => {
+        console.log('✅ Updating projects');
+        set((state) => ({
+          currentResume: {
+            ...state.currentResume,
+            projects,
+          },
+        }));
+      },
+
+      updateCertifications: (certifications) => {
+        console.log('✅ Updating certifications');
+        set((state) => ({
+          currentResume: {
+            ...state.currentResume,
+            certifications,
+          },
+        }));
+      },
+
+      updateAwards: (awards) => {
+        console.log('✅ Updating awards');
+        set((state) => ({
+          currentResume: {
+            ...state.currentResume,
+            awards,
+          },
+        }));
+      },
+
+      updateVolunteer: (volunteer) => {
+        console.log('✅ Updating volunteer');
+        set((state) => ({
+          currentResume: {
+            ...state.currentResume,
+            volunteer,
+          },
+        }));
+      },
+
+      updateStyling: (styling) => {
+        console.log('✅ Updating styling');
+        set((state) => ({
+          currentResume: {
+            ...state.currentResume,
+            styling: {
+              ...state.currentResume.styling,
+              ...styling,
+            } as any,
           },
         }));
       },

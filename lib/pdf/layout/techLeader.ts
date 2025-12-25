@@ -11,7 +11,7 @@ export function renderTechLeader(resume: Resume, template: Template): string {
   const hasExperience = resume.experience && resume.experience.length > 0;
   const hasEducation = resume.education && resume.education.length > 0;
   const hasSkills = resume.skills && (resume.skills.technical.length > 0 || resume.skills.soft.length > 0 || resume.skills.tools.length > 0);
-  const hasLanguages = resume.skills.languages && resume.skills.languages.length > 0;
+  const hasLanguages = resume.skills?.languages && resume.skills.languages.length > 0;
   const hasProjects = resume.projects && resume.projects.length > 0;
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;
@@ -234,6 +234,19 @@ export function renderTechLeader(resume: Resume, template: Template): string {
       line-height: 1.2;
       letter-spacing: 0.3pt;
     }
+
+    .profile-image-container {
+      text-align: center;
+      margin-bottom: 10pt;
+    }
+
+    .profile-image {
+      width: 110pt;
+      height: 110pt;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3pt solid ${config.colors.primary};
+    }
   </style>
 </head>
 <body>
@@ -241,6 +254,11 @@ export function renderTechLeader(resume: Resume, template: Template): string {
   
   <div class="content">
     <div class="sidebar">
+      ${resume.styling?.showProfileImage && resume.contactInfo?.profileImage ? `
+      <div class="profile-image-container">
+        <img src="${resume.contactInfo.profileImage}" alt="Profile" class="profile-image" />
+      </div>
+      ` : ''}
       <div class="header-section">
         <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
         ${resume.contactInfo?.professionalTitle ? `<div class="professional-title">${resume.contactInfo.professionalTitle}</div>` : ''}

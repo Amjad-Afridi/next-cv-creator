@@ -42,6 +42,7 @@ export interface ContactInfo {
   firstName: string;
   lastName: string;
   professionalTitle?: string;
+  profileImage?: string; // Base64 data URI
   email: string;
   phone: string;
   city: string;
@@ -159,4 +160,5 @@ export interface Styling {
   primaryColor: string;
   fontSize: 'small' | 'medium' | 'large';
   sectionOrder: string[];
+  showProfileImage?: boolean;
 }

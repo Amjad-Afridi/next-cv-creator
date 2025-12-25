@@ -2,12 +2,12 @@
 "use client";
 
 import { useResumeStore } from "@/lib/store/resumeStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import StepIndicator from "@/components/builder/StepIndicator";
 import ContactInfoStep from "@/components/builder/FormSteps/ContactInfoStep";
 import SummaryStep from "@/components/builder/FormSteps/SummaryStep";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ExperienceStep from "@/components/builder/FormSteps/ExperienceStep";
 import EducationStep from "@/components/builder/FormSteps/EducationStep";
@@ -15,10 +15,17 @@ import SkillsStep from "@/components/builder/FormSteps/SkillsStep";
 import OptionalSectionsStep from "@/components/builder/FormSteps/OptionalSectionsStep";
 import FinalizeStep from "@/components/builder/FormSteps/FinalizeStep";
 import { LiveTemplatePreview } from "@/components/builder/LiveTemplatePreview";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function BuilderPage() {
   const { currentStep, currentResume, initializeResume, setCurrentStep } = useResumeStore();
   const initialized = useRef(false);
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false);
 
   useEffect(() => {
     // Only run once on mount
@@ -124,12 +131,35 @@ export default function BuilderPage() {
             {renderStep()}
           </div>
 
-          {/* Right Side - Preview */}
+          {/* Right Side - Preview (Desktop) */}
           <div className="hidden lg:block">
             <LiveTemplatePreview />
           </div>
         </div>
       </div>
+
+      {/* Floating Preview Button (Mobile/Tablet) */}
+      <div className="lg:hidden fixed bottom-6 right-6 z-50">
+        <Button
+          size="lg"
+          onClick={() => setShowPreviewDialog(true)}
+          className="shadow-lg rounded-full h-14 w-14 p-0"
+        >
+          <Eye className="h-6 w-6" />
+        </Button>
+      </div>
+
+      {/* Preview Dialog (Mobile/Tablet) */}
+      <Dialog open={showPreviewDialog} onOpenChange={setShowPreviewDialog}>
+        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] p-0">
+          <DialogHeader className="px-6 pt-6 pb-4 border-b">
+            <DialogTitle>Live Preview</DialogTitle>
+          </DialogHeader>
+          <div className="overflow-auto h-[calc(90vh-80px)]">
+            <LiveTemplatePreview />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

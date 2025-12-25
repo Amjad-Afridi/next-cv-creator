@@ -30,14 +30,19 @@ export function generateAllTemplates(): Template[] {
           ...baseTemplate.config,
           colors: scheme,
         },
-        popularity: Math.max(baseTemplate.popularity - Math.random() * 10, 70),
+        popularity: baseTemplate.popularity - 5, // Consistent popularity for color variations
       };
 
       allTemplates.push(colorVariation);
     });
   });
 
-  return allTemplates.sort((a, b) => b.popularity - a.popularity);
+  // Sort by popularity (desc), then by ID (asc) for consistent ordering
+  return allTemplates.sort((a, b) => {
+    const popDiff = b.popularity - a.popularity;
+    if (popDiff !== 0) return popDiff;
+    return a.id.localeCompare(b.id);
+  });
 }
 
 /**

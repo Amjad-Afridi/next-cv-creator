@@ -11,7 +11,7 @@ export function renderAcademicScholar(resume: Resume, template: Template): strin
   const hasExperience = resume.experience && resume.experience.length > 0;
   const hasEducation = resume.education && resume.education.length > 0;
   const hasSkills = resume.skills && (resume.skills.technical.length > 0 || resume.skills.soft.length > 0 || resume.skills.tools.length > 0);
-  const hasLanguages = resume.skills.languages && resume.skills.languages.length > 0;
+  const hasLanguages = resume.skills?.languages && resume.skills.languages.length > 0;
   const hasProjects = resume.projects && resume.projects.length > 0;
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;

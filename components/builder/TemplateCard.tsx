@@ -5,8 +5,10 @@ import { Template } from "@/lib/types/template";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Sparkles, Star } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { generateResumeHTML } from "@/lib/pdf/templateRenderer";
+import { sampleResume } from "@/lib/data/sampleResume";
 
 interface TemplateCardProps {
   template: Template;
@@ -27,7 +29,7 @@ export function TemplateCard({
       )}
       onClick={() => !isSelected && onSelect(template.id)}
     >
-      <CardContent className="p-4">
+      <CardContent className="p-3">
         {/* Selected Indicator */}
         {isSelected && (
           <div className="absolute top-2 right-2 bg-primary text-primary-foreground rounded-full p-1">
@@ -35,25 +37,37 @@ export function TemplateCard({
           </div>
         )}
 
-        {/* Template Thumbnail/Preview Placeholder */}
+        {/* Template Thumbnail Preview */}
         <div className={cn(
-          "w-full h-32 bg-gradient-to-br rounded-md mb-3 flex items-center justify-center",
-          "from-slate-100 to-slate-200 border-2",
+          "w-full h-48 bg-slate-50 rounded-md mb-2 overflow-hidden border-2 relative",
           isSelected && "border-primary"
         )}>
-          <div className="text-center">
-            <Star className={cn(
-              "h-8 w-8 mx-auto mb-1",
-              isSelected ? "text-primary fill-primary" : "text-slate-400"
-            )} />
-            <p className="text-xs text-slate-500 font-medium">
-              {template.style}
-            </p>
-          </div>
+          <iframe
+            srcDoc={generateResumeHTML(
+              {
+                ...sampleResume,
+                template: template.id,
+                styling: {
+                  ...sampleResume.styling,
+                  showProfileImage: false,
+                },
+              } as any,
+              template
+            )}
+            className="pointer-events-none scale-[0.2] origin-top-left"
+            style={{
+              width: '500%',
+              height: '500%',
+              overflow: 'hidden',
+            }}
+            title={`${template.name} preview`}
+            sandbox="allow-same-origin"
+            scrolling="no"
+          />
         </div>
 
         {/* Template Info */}
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <div className="flex items-start justify-between gap-2">
             <h3 className={cn(
               "font-semibold text-sm line-clamp-1",

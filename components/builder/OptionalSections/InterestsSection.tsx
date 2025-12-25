@@ -34,7 +34,7 @@ const INTEREST_SUGGESTIONS = [
 ];
 
 export default function InterestsSection() {
-  const { currentResume } = useResumeStore();
+  const { currentResume, updateInterests } = useResumeStore();
   const [interests, setInterests] = useState<string[]>(
     currentResume.interests || []
   );
@@ -44,15 +44,10 @@ export default function InterestsSection() {
   // Auto-save interests
   useEffect(() => {
     const timer = setTimeout(() => {
-      useResumeStore.setState((state) => ({
-        currentResume: {
-          ...state.currentResume,
-          interests,
-        },
-      }));
+      updateInterests(interests);
     }, 500);
     return () => clearTimeout(timer);
-  }, [interests]);
+  }, [interests, updateInterests]);
 
   const addInterest = (interest: string) => {
     const trimmed = interest.trim();

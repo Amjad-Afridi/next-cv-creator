@@ -29,9 +29,23 @@ export default function SummaryStep() {
     },
   });
 
+  // Watch all form fields
+  const watchedData = watch();
+
+  // Auto-save with debouncing (500ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (watchedData.summary !== undefined) {
+        updateSummary(watchedData.summary || "");
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [watchedData, updateSummary]);
+
   // Watch the summary field for character count
   const summaryValue = watch("summary");
-  
+
   // Update character count
   useEffect(() => {
     setCharCount(summaryValue?.length || 0);

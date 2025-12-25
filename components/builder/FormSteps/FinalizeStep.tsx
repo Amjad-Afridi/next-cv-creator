@@ -6,9 +6,10 @@ import { useState } from "react";
 import { useResumeStore } from "@/lib/store/resumeStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Download, Check, Sparkles } from "lucide-react";
+import { ArrowLeft, Download, Check, Sparkles, Camera, AlertCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import TemplateSelector from "@/components/builder/TemplateSelector";
 import { getTemplateById } from "@/lib/templates/templateUtils";
 import { toast } from "sonner";
@@ -171,6 +172,65 @@ export default function FinalizeStep() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Profile Image Toggle */}
+      {currentResume.contactInfo?.profileImage && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Camera className="h-4 w-4" />
+              Profile Photo Settings
+            </CardTitle>
+            <CardDescription>
+              Choose whether to display your profile photo on the resume
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-start space-x-3">
+              <Checkbox
+                id="showProfileImage"
+                checked={currentResume.styling?.showProfileImage || false}
+                onCheckedChange={(checked) => {
+                  useResumeStore.setState((state) => ({
+                    currentResume: {
+                      ...state.currentResume,
+                      styling: {
+                        ...state.currentResume.styling!,
+                        showProfileImage: checked === true,
+                      },
+                    },
+                  }));
+                }}
+              />
+              <div className="grid gap-1.5 leading-none">
+                <Label
+                  htmlFor="showProfileImage"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                >
+                  Show profile photo on resume
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Your photo will only appear on two-column templates (Modern Two-Column, Tech Leader, Infographic Modern)
+                </p>
+              </div>
+            </div>
+
+            {/* ATS Warning */}
+            {currentResume.styling?.showProfileImage && (
+              <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-md p-3">
+                <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                <div className="text-xs text-amber-800">
+                  <p className="font-medium">Note for ATS-friendly templates:</p>
+                  <p className="mt-1">
+                    If you're applying through Applicant Tracking Systems (ATS), consider disabling the photo.
+                    Many ATS systems cannot process images and may reject resumes with photos.
+                  </p>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Template Selection */}
       <Card>

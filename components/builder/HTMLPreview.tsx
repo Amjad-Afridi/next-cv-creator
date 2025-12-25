@@ -14,13 +14,13 @@ export function HTMLPreview({ htmlContent, className = '' }: HTMLPreviewProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [zoom, setZoom] = useState(50); // Start at 60% for better fit
+  const [zoom, setZoom] = useState(50); // Start at 50% for better fit
 
   // Letter size in pixels at 96 DPI
   const PAGE_WIDTH = 816; // 8.5 inches * 96 DPI
   const PAGE_HEIGHT = 1056; // 11 inches * 96 DPI
 
-  const zoomLevels = [40, 50, 60, 75, 90, 100, 125, 150];
+  const zoomLevels = [40, 50, 60, 70, 80 ,90, 100, 110, 120, 130, 140, 150];
 
   useEffect(() => {
     if (!iframeRef.current) return;

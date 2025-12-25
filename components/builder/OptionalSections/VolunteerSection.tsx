@@ -26,7 +26,7 @@ interface VolunteerForm {
 }
 
 export default function VolunteerSection() {
-  const { currentResume } = useResumeStore();
+  const { currentResume, updateVolunteer } = useResumeStore();
 
   const { register, control, watch } = useForm<VolunteerForm>({
     defaultValues: {
@@ -50,19 +50,20 @@ export default function VolunteerSection() {
     name: "volunteer",
   });
 
-  // Auto-save
-  const watchedVolunteer = watch("volunteer");
+  // Auto-save on change - watch all form values to ensure deep changes are detected
+  const formValues = watch();
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      useResumeStore.setState((state) => ({
-        currentResume: {
-          ...state.currentResume,
-          volunteer: watchedVolunteer,
-        },
-      }));
+      const volunteerData = formValues.volunteer || [];
+
+      // Filter out empty volunteer entries
+      const filteredVolunteer = volunteerData.filter((vol: any) => vol.role || vol.organization);
+      updateVolunteer(filteredVolunteer);
     }, 500);
     return () => clearTimeout(timer);
-  }, [watchedVolunteer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(formValues.volunteer), updateVolunteer]);
 
   return (
     <div className="space-y-4">

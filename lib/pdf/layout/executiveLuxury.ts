@@ -11,7 +11,7 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
   const hasExperience = resume.experience && resume.experience.length > 0;
   const hasEducation = resume.education && resume.education.length > 0;
   const hasSkills = resume.skills && (resume.skills.technical.length > 0 || resume.skills.soft.length > 0 || resume.skills.tools.length > 0);
-  const hasLanguages = resume.skills.languages && resume.skills.languages.length > 0;
+  const hasLanguages = resume.skills?.languages && resume.skills.languages.length > 0;
   const hasProjects = resume.projects && resume.projects.length > 0;
   const hasCertifications = resume.certifications && resume.certifications.length > 0;
   const hasAwards = resume.awards && resume.awards.length > 0;
@@ -162,15 +162,16 @@ export function renderExecutiveLuxury(resume: Resume, template: Template): strin
       margin-top: 2pt;
       font-style: italic;
     }
+
   </style>
 </head>
 <body>
-  <div class="header">
+  <div class="header" style="text-align: center;">
     <div class="name">${hasContactInfo ? `${resume.contactInfo.firstName} ${resume.contactInfo.lastName}` : 'YOUR NAME'}</div>
     ${resume.contactInfo?.professionalTitle ? `<div class="professional-title">${resume.contactInfo.professionalTitle}</div>` : ''}
     <div class="contact-info">
-      ${resume.contactInfo?.email || 'email@example.com'} • 
-      ${resume.contactInfo?.phone || '(555) 123-4567'} • 
+      ${resume.contactInfo?.email || 'email@example.com'} •
+      ${resume.contactInfo?.phone || '(555) 123-4567'} •
       ${resume.contactInfo?.city || 'City'}, ${resume.contactInfo?.country || 'Country'}
     </div>
     ${(resume.contactInfo?.linkedin || resume.contactInfo?.github || resume.contactInfo?.website || resume.contactInfo?.customLink?.url) ? `

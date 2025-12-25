@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, ArrowLeft, Plus, Trash2, GraduationCap, Lightbulb } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useEffect } from "react";
 
 // Schema for the entire education array
 const educationArraySchema = z.object({
@@ -64,6 +65,26 @@ export default function EducationStep() {
     control,
     name: "education",
   });
+
+  // Watch all form fields for auto-save
+  const watchedData = watch();
+
+  // Auto-save with debouncing (500ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (watchedData.education && watchedData.education.length > 0) {
+        // Only auto-save if there's at least some data
+        const hasData = watchedData.education.some(
+          edu => edu.degree || edu.institution || edu.location
+        );
+        if (hasData) {
+          updateEducation(watchedData.education);
+        }
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [watchedData, updateEducation]);
 
   const onSubmit = (data: EducationFormData) => {
     updateEducation(data.education);
